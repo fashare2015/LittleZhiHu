@@ -5,11 +5,15 @@
              xmlns:app="http://schemas.android.com/apk/res-auto"
              tools:context=".home.ui.ArticleListFragment">
 
+    <include layout="@layout/toolbar_common"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_article_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?actionBarSize"/>
+        android:paddingTop="?actionBarSize"
+        android:clipToPadding="false"/>
+    <!-- padding 但仍然 match_parent: clipToPadding false-->
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_menu"

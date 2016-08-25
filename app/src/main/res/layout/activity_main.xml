@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.MainActivity">
 
-    <include layout="@layout/toolbar_common"/>
+    <!--<include layout="@layout/toolbar_common"/>-->
 
     <fragment
         android:id="@+id/fragment_home_list"

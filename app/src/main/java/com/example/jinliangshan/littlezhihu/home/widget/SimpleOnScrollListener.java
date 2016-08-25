@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 public abstract class SimpleOnScrollListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        if (dy > 0) {
+        if (dy > 0) {   // dy > 0 -> scroll distance increase -> Scroll Up
             onScrolledUp(dy);
         } else if (dy < 0) {
             onScrolledDown(dy);
