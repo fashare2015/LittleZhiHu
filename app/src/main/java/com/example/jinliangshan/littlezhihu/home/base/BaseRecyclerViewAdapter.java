@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ViewHolder<T>>{
     protected Context mContext;
     private List<T> mDataList;
+    private OnItemClickListener mOnItemClickListener;
 
     public List<T> getDataList() {
         return mDataList;
@@ -24,6 +25,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     public void setDataList(List<T> dataList) {
         mDataList = dataList;
         this.notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        mOnItemClickListener = onItemClickListener;
     }
 
     public BaseRecyclerViewAdapter(Context context) {
@@ -41,6 +46,10 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     @Override
     public void onBindViewHolder(ViewHolder<T> holder, int position) {
         holder.onBind(getDataList().get(position), position);
+        holder.itemView.setOnClickListener(view -> {
+            if(mOnItemClickListener != null)
+                mOnItemClickListener.onItemClick(holder.itemView, position);
+        });
     }
 
     @Override
@@ -56,5 +65,9 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         }
 
         abstract public void onBind(T data, int pos);
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View itemView, int position);
     }
 }

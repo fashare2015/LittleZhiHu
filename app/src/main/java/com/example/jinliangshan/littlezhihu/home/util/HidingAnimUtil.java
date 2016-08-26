@@ -26,7 +26,7 @@ public class HidingAnimUtil implements HidingAnim {
 
     public HidingAnimUtil setHidingMod(int mHidingMod) {
         this.mHidingMod = mHidingMod;
-//        initDy();
+        initDy();
         return this;
     }
 
@@ -70,13 +70,12 @@ public class HidingAnimUtil implements HidingAnim {
      * @return
      */
     private float getDy(boolean toShow) {
-        initDy();
+        if(mHideDy == 0)
+            initDy();
         return toShow? mShowDy: mHideDy;
     }
 
     private void initDy(){
-        if(mHideDy != 0)
-            return ;
         if(mHidingMod == HIDING_MOD_TOP){
             mHideDy = -mView.getBottom();
         }else{

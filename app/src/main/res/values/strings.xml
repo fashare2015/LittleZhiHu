@@ -3,4 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--transition-->
+    <string name="cv_article_transition">cv_article_transition</string>
+    <string name="layout_toolbar_transition">layout_toolbar_transition</string>
 </resources>
