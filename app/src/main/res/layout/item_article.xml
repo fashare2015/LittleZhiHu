@@ -7,23 +7,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/card_margin"
-    android:padding="@dimen/card_padding"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     android:stateListAnimator="@drawable/touch_raise"
     android:transitionName="@string/cv_article_transition"
     app:cardBackgroundColor="@android:color/darker_gray"
-    app:cardCornerRadius="@dimen/card_corner_radius">
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:contentPadding="@dimen/card_padding">
 
     <!-- z轴: cardElevation -->
     <!-- 涟漪效果: clickable + foreground 属性-->
     <!-- 按住卡片上升: stateListAnimator -->
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textSize="40dp"
-        android:textColor="@android:color/black"/>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="@dimen/item_article_iv_width"
+            android:layout_height="@dimen/item_article_iv_height"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:text="@string/app_name"
+            android:textSize="@dimen/item_article_tv_textsize"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

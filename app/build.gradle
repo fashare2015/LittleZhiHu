@@ -70,6 +70,9 @@ dependencies {
     // okhttp: 网络请求
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
 
+    // universal-image-loader: 图片加载
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
     // rxjava
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.1.0'

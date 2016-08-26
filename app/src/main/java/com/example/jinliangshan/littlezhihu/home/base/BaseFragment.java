@@ -32,6 +32,11 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initView(view);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         loadData();
     }
 

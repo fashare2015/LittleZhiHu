@@ -16,20 +16,15 @@ import android.widget.Toast;
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
-import com.example.jinliangshan.littlezhihu.home.model.Article;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.rxjava.observable.BaseObservable;
+import com.example.jinliangshan.littlezhihu.home.network.loaddata.OnLoadLatestNews;
+import com.example.jinliangshan.littlezhihu.home.rxjava.observable.ObservableUtil;
 import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 import com.example.jinliangshan.littlezhihu.home.widget.SimpleOnScrollListener;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import butterknife.BindView;
-import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener{
 
@@ -59,44 +54,57 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         mArticleAdapter.setOnItemClickListener(this);
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
 
-        mArticleAdapter.setDataList(new ArrayList<>(Arrays.asList(
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article(),
-                new Article()
-        )));
+//        mArticleAdapter.setDataList(new ArrayList<>(Arrays.asList(
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article(),
+//                new Article()
+//        )));
 
         initAnim(); // 等 view 的相对布局已定
     }
 
     @Override
     protected void loadData() {
-//        OkHttpHelper.getInstance().get(Apis.URL_LATEST_NEWS);
+//        OkHttpUtil.getInstance().get(Apis.URL_LATEST_NEWS);
 
 //        new LatestNewsObservable(null).newInstance()
-        Observable.create(
-                        new BaseObservable.BaseOnSubscribe<>(new LatestNews())
-                ).subscribeOn(Schedulers.io())
-                
+//        Observable.create(
+//                        new ObservableUtil.CommonOnSubscribe<>(new LatestNews())
+//                ).subscribeOn(Schedulers.io())
+        ObservableUtil.newInstance(new OnLoadLatestNews())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(LatestNews:: getStories)
+//                .map(this:: convertToArticleList)
                 .subscribe(
                         // onNext, 请求成功
-                        data -> Toast.makeText(mContext, data.getDate(), Toast.LENGTH_SHORT).show(),
+//                        articles -> mArticleAdapter.setDataList(articles),
+                        mArticleAdapter:: setDataList,
                         // onError, 请求失败
-                        throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                        throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_LONG).show()
                 );
     }
+
+//    @TargetApi(Build.VERSION_CODES.N)
+//    private List<Article> convertToArticleList(List<LatestNews.Article> storiesBeanList) {
+//        return Stream.of(storiesBeanList)
+//                .map(storiesBean -> (Article)storiesBean)
+//                .collect(Collectors.toList());
+//        return storiesBeanList.stream()
+//                .map(storiesBean -> (Article)storiesBean)
+//                .collect(Collectors.toList());
+//    }
 
     private void setRvPaddingTop(int paddingTop) {
         mRvArticleList.setPadding(0, paddingTop, 0, 0);

@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
 /**
  * Created by jinliangshan on 16/8/25.
  */
-public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ViewHolder<T>>{
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>{
     protected Context mContext;
     private List<T> mDataList;
     private OnItemClickListener mOnItemClickListener;
@@ -37,14 +37,14 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     }
 
     @Override
-    public ViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
         return getViewHolder(parent, viewType);
     }
 
-    protected abstract ViewHolder<T> getViewHolder(ViewGroup parent, int viewType);
+    protected abstract BaseViewHolder<T> getViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(ViewHolder<T> holder, int position) {
+    public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
         holder.onBind(getDataList().get(position), position);
         holder.itemView.setOnClickListener(view -> {
             if(mOnItemClickListener != null)
@@ -57,9 +57,9 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         return mDataList == null? 0: mDataList.size();
     }
 
-    public abstract static class ViewHolder<T> extends RecyclerView.ViewHolder{
+    public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder{
 
-        public ViewHolder(View itemView) {
+        public BaseViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
