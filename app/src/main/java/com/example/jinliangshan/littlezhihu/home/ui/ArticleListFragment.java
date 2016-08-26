@@ -11,11 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.model.Article;
+import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
+import com.example.jinliangshan.littlezhihu.home.rxjava.observable.BaseObservable;
 import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 import com.example.jinliangshan.littlezhihu.home.widget.SimpleOnScrollListener;
@@ -24,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import butterknife.BindView;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener{
 
@@ -51,20 +57,7 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
 
         mArticleAdapter.setOnItemClickListener(this);
-        mRvArticleList.addOnScrollListener(new SimpleOnScrollListener(){
-            @Override
-            public void onScrolledUp(int dy) {
-                Log.d("ArticleListFragment", "onScrolledUp");
-                mTbHidingAnimUtil.hide();
-                mFabHidingAnimUtil.hide();
-            }
-
-            @Override
-            public void onScrolledDown(int dy) {
-                mTbHidingAnimUtil.show();
-                mFabHidingAnimUtil.show();
-            }
-        });
+        mRvArticleList.addOnScrollListener(new MyOnScrollListener());
 
         mArticleAdapter.setDataList(new ArrayList<>(Arrays.asList(
                 new Article(),
@@ -87,6 +80,24 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         initAnim(); // 等 view 的相对布局已定
     }
 
+    @Override
+    protected void loadData() {
+//        OkHttpHelper.getInstance().get(Apis.URL_LATEST_NEWS);
+
+//        new LatestNewsObservable(null).newInstance()
+        Observable.create(
+                        new BaseObservable.BaseOnSubscribe<>(new LatestNews())
+                ).subscribeOn(Schedulers.io())
+                
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        // onNext, 请求成功
+                        data -> Toast.makeText(mContext, data.getDate(), Toast.LENGTH_SHORT).show(),
+                        // onError, 请求失败
+                        throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+    }
+
     private void setRvPaddingTop(int paddingTop) {
         mRvArticleList.setPadding(0, paddingTop, 0, 0);
     }
@@ -104,6 +115,20 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         Intent intent = new Intent(activity, ArticleActivity.class);
         Bundle options = TransitionUtils.makeActivityOptionsBundle(activity, itemView);
         ActivityCompat.startActivity(activity, intent, options);
-//        activity.startActivity(intent);
+    }
+
+    private class MyOnScrollListener extends SimpleOnScrollListener{
+        @Override
+        public void onScrolledUp(int dy) {
+            Log.d("ArticleListFragment", "onScrolledUp");
+            mTbHidingAnimUtil.hide();
+            mFabHidingAnimUtil.hide();
+        }
+
+        @Override
+        public void onScrolledDown(int dy) {
+            mTbHidingAnimUtil.show();
+            mFabHidingAnimUtil.show();
+        }
     }
 }

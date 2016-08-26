@@ -32,9 +32,12 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initView(view);
+        loadData();
     }
 
     protected abstract void initView(View view);
+
+    protected abstract void loadData();
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
