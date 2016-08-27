@@ -14,9 +14,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutRes());
 
         ButterKnife.bind(this);
+        initView();
+        loadData();
     }
 
-    abstract protected @LayoutRes int getLayoutRes();
+    protected abstract @LayoutRes int getLayoutRes();
+
+    protected abstract void initView();
+
+    protected abstract void loadData();
 
 }
 

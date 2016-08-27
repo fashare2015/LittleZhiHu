@@ -14,17 +14,18 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
+import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.network.loaddata.OnLoadLatestNews;
-import com.example.jinliangshan.littlezhihu.home.rxjava.observable.ObservableUtil;
+import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
 import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
-import com.example.jinliangshan.littlezhihu.home.widget.SimpleOnScrollListener;
+import com.example.jinliangshan.littlezhihu.home.widget.BaseOnScrollListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
-import rx.android.schedulers.AndroidSchedulers;
+import rx.Observable;
 
 public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener{
 
@@ -77,16 +78,10 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 
     @Override
     protected void loadData() {
-//        OkHttpUtil.getInstance().get(Apis.URL_LATEST_NEWS);
-
-//        new LatestNewsObservable(null).newInstance()
-//        Observable.create(
-//                        new ObservableUtil.CommonOnSubscribe<>(new LatestNews())
-//                ).subscribeOn(Schedulers.io())
-        ObservableUtil.newInstance(new OnLoadLatestNews())
-                .observeOn(AndroidSchedulers.mainThread())
+        final Observable<LatestNews> observable = Observables.getLatestNewsObservable();
+                observable
                 .map(LatestNews:: getStories)
-//                .map(this:: convertToArticleList)
+                .doOnNext(articles -> dispatch(observable)) // 下发 observable 给 activity
                 .subscribe(
                         // onNext, 请求成功
 //                        articles -> mArticleAdapter.setDataList(articles),
@@ -95,16 +90,6 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
                         throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_LONG).show()
                 );
     }
-
-//    @TargetApi(Build.VERSION_CODES.N)
-//    private List<Article> convertToArticleList(List<LatestNews.Article> storiesBeanList) {
-//        return Stream.of(storiesBeanList)
-//                .map(storiesBean -> (Article)storiesBean)
-//                .collect(Collectors.toList());
-//        return storiesBeanList.stream()
-//                .map(storiesBean -> (Article)storiesBean)
-//                .collect(Collectors.toList());
-//    }
 
     private void setRvPaddingTop(int paddingTop) {
         mRvArticleList.setPadding(0, paddingTop, 0, 0);
@@ -125,7 +110,14 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         ActivityCompat.startActivity(activity, intent, options);
     }
 
-    private class MyOnScrollListener extends SimpleOnScrollListener{
+    /**
+     * <p>
+     * RecyclerView 滑动回调<br/>
+     * 隐藏 toolBar 和 优化图片加载
+     * </p>
+     */
+    private class MyOnScrollListener extends BaseOnScrollListener {
+        // 隐藏 toolBar
         @Override
         public void onScrolledUp(int dy) {
             Log.d("ArticleListFragment", "onScrolledUp");
@@ -138,5 +130,19 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
             mTbHidingAnimUtil.show();
             mFabHidingAnimUtil.show();
         }
+
+        // 优化图片加载
+        private ImageLoader mImageLoader = MyApplication.getInstance().getImageLoader();
+
+        @Override
+        protected void onDragging() {
+            mImageLoader.pause();
+        }
+
+        @Override
+        protected void onIdle() {
+            mImageLoader.resume();
+        }
     }
+
 }

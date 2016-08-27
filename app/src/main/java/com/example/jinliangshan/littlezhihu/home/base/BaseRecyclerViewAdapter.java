@@ -53,6 +53,12 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     }
 
     @Override
+    public void onViewRecycled(BaseViewHolder<T> holder) {
+        super.onViewRecycled(holder);
+        holder.onRecycled();
+    }
+
+    @Override
     public int getItemCount() {
         return mDataList == null? 0: mDataList.size();
     }
@@ -64,7 +70,9 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
             ButterKnife.bind(this, itemView);
         }
 
-        abstract public void onBind(T data, int pos);
+        public abstract void onBind(T data, int pos);
+
+        public abstract void onRecycled();
     }
 
     public interface OnItemClickListener{

@@ -1,20 +1,22 @@
 package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import rx.Observable;
 
 public abstract class BaseFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+    private static final String TAG = "BaseFragment";
     protected Context mContext;
+    protected OnLoadDataListener mOnLoadDataListener;
 
     public BaseFragment() {}
 
@@ -32,11 +34,6 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initView(view);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         loadData();
     }
 
@@ -44,43 +41,30 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void loadData();
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+        if (context instanceof OnLoadDataListener) {
+            mOnLoadDataListener = (OnLoadDataListener) context;
+        } else {
+            Log.i(TAG, context.toString()
+                    + " must implement OnLoadDataListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mOnLoadDataListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    protected void dispatch(Observable<?> dataObservable){
+        if(mOnLoadDataListener != null)
+            mOnLoadDataListener.loadingFromFragment(dataObservable);
+    }
+
+    public interface OnLoadDataListener{
+        void loadingFromFragment(Observable<?> dataObservable);
     }
 }

@@ -10,6 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
  * Date: 2016-08-27
  * Time: 03:01
  * <br/><br/>
+ * 需要在 manifest 里配置 application name
  */
 public class MyApplication extends Application {
     private static MyApplication sApplication;
@@ -20,17 +21,14 @@ public class MyApplication extends Application {
         return mImageLoader;
     }
 
-    private MyApplication(){
-        super();
-    }
-
     public static MyApplication getInstance() {
-        return sApplication = new MyApplication();
+        return sApplication;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        sApplication = MyApplication.this;
         initImageLoader();
     }
 

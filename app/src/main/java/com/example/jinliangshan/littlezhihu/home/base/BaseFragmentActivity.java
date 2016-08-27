@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.example.jinliangshan.littlezhihu.R;
 
-public abstract class BaseFragmentActivity extends BaseActivity {
+public abstract class BaseFragmentActivity extends BaseActivity implements BaseFragment.OnLoadDataListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -12,12 +12,17 @@ public abstract class BaseFragmentActivity extends BaseActivity {
         initFragment();
     }
 
+    protected abstract void initFragment();
+
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_activity_base;
     }
 
-    protected abstract void initFragment();
+    @Override
+    protected void initView() {}
 
+    @Override
+    protected void loadData() {}
 }
 

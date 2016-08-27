@@ -5,7 +5,9 @@
              xmlns:app="http://schemas.android.com/apk/res-auto"
              tools:context=".home.ui.ArticleListFragment">
 
-    <include layout="@layout/toolbar_common"/>
+    <include layout="@layout/toolbar_common"
+             android:layout_width="match_parent"
+        android:layout_height="0dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_article_list"
