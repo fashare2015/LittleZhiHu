@@ -19,12 +19,13 @@
         <!--layout_scrollFlags: TODO -->
         <!-- contentScrim: 设置完全折叠时的颜色 -->
 
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/iv_banner"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:scaleType="centerCrop"
-            app:layout_collapseMode="parallax" />
+        <LinearLayout
+            android:id="@+id/banner_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/banner_container_height"
+            android:orientation="vertical"
+            app:layout_collapseMode="parallax"/>
+
         <!-- layout_collapseMode: TODO-->
 
         <android.support.v7.widget.Toolbar

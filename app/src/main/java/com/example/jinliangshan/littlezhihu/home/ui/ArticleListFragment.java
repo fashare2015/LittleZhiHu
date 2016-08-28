@@ -3,7 +3,6 @@ package com.example.jinliangshan.littlezhihu.home.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,6 @@ import com.example.jinliangshan.littlezhihu.home.base.BaseOnScrollListener;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
-import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -29,17 +27,15 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 
 //    @BindView(R.id.layout_common_toolbar)
 //    public CollapsingToolbarLayout mLayoutCommonToolbar;
-//    @BindView(R.id.tb_common)
-//    public Toolbar mTbCommon;
 
     @BindView(R.id.rv_article_list)
     RecyclerView mRvArticleList;
     private ArticleListAdapter mArticleAdapter;
 
-    @BindView(R.id.fab_menu)
-    FloatingActionButton mFabMenu;
+//    @BindView(R.id.fab_menu)
+//    FloatingActionButton mFabMenu;
 //    private HidingAnimUtil mTbHidingAnimUtil;
-    private HidingAnimUtil mFabHidingAnimUtil;
+//    private HidingAnimUtil mFabHidingAnimUtil;
 
     @Override
     protected int getLayoutRes() {
@@ -53,24 +49,6 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 
         mArticleAdapter.setOnItemClickListener(this);
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
-
-//        mArticleAdapter.setDataList(new ArrayList<>(Arrays.asList(
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article(),
-//                new Article()
-//        )));
 
         initAnim(); // 等 view 的相对布局已定
     }
@@ -90,15 +68,11 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
                 );
     }
 
-    private void setRvPaddingTop(int paddingTop) {
-        mRvArticleList.setPadding(0, paddingTop, 0, 0);
-    }
-
     private void initAnim() {
 //        mTbHidingAnimUtil = new HidingAnimUtil(mLayoutCommonToolbar)
 //                .setHidingMod(HidingAnimUtil.HIDING_MOD_TOP);
-        mFabHidingAnimUtil = new HidingAnimUtil(mFabMenu)
-                .setHidingMod(HidingAnimUtil.HIDING_MOD_BOTTOM);
+//        mFabHidingAnimUtil = new HidingAnimUtil(mFabMenu)
+//                .setHidingMod(HidingAnimUtil.HIDING_MOD_BOTTOM);
     }
 
     @Override
@@ -121,13 +95,13 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         public void onScrolledUp(int dy) {
             Log.d("ArticleListFragment", "onScrolledUp");
 //            mTbHidingAnimUtil.hide();
-            mFabHidingAnimUtil.hide();
+//            mFabHidingAnimUtil.hide();
         }
 
         @Override
         public void onScrolledDown(int dy) {
 //            mTbHidingAnimUtil.show();
-            mFabHidingAnimUtil.show();
+//            mFabHidingAnimUtil.show();
         }
 
         // 优化图片加载

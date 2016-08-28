@@ -8,13 +8,10 @@ import android.support.v7.widget.Toolbar;
 import com.example.jinliangshan.littlezhihu.R;
 
 import butterknife.BindView;
-import pl.droidsonroids.gif.GifImageView;
 
 public abstract class BaseFragmentActivity extends BaseActivity implements BaseFragment.OnLoadDataListener {
 
     // toolBar
-    @Nullable @BindView(R.id.iv_banner)
-    protected GifImageView mIvBanner;
     @Nullable @BindView(R.id.tb_common)
     Toolbar mTbCommon;
     @Nullable @BindView(R.id.layout_common_toolbar)

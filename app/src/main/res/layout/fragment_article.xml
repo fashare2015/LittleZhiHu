@@ -12,6 +12,4 @@
         android:text="@string/aaa"
         android:textSize="30sp"/>
 
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -17,25 +17,22 @@ import rx.Observable;
 public class ArticleActivity extends BaseFragmentActivity {
 
     private Fragment mArticleFragment;
+    private Fragment mArticleBannerFragment;
 
     @BindBitmap(R.mipmap.ic_launcher)
     Bitmap mDefaultBitmap;
 
     @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_activity_article;
-    }
-
-    @Override
     protected void initFragment() {
         mArticleFragment = new ArticleFragment();
         FragmentManagerUtil.addFragment(getSupportFragmentManager(), R.id.fragment_container, mArticleFragment);
+        mArticleBannerFragment = new ArticleBannerFragment();
+        FragmentManagerUtil.addFragment(getSupportFragmentManager(), R.id.banner_container, mArticleBannerFragment);
     }
 
     @Override
     protected void initView() {
 //        load(this, R.drawable.banner_default, mIvBanner);
-        mIvBanner.setImageResource(R.drawable.banner_default);
     }
 
     public static void load(Context context, @DrawableRes int imageRes, ImageView view) {

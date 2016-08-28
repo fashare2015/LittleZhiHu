@@ -22,8 +22,8 @@ import butterknife.BindView;
  * Time: 19:15
  * <br/><br/>
  */
-public class BannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
-    private static final String TAG = "BannerAdapter";
+public class HomeBannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
+    private static final String TAG = "HomeBannerAdapter";
     private BitmapCache mBitmapCache = new BitmapCache();
 
     @BindView(R.id.iv_image)
@@ -36,7 +36,7 @@ public class BannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
 
     Bitmap bitmap;
 
-    public BannerAdapter(Context context) {
+    public HomeBannerAdapter(Context context) {
         super(context);
     }
 
