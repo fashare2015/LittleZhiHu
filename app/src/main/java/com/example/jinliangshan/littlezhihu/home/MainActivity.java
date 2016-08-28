@@ -1,19 +1,16 @@
 package com.example.jinliangshan.littlezhihu.home;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragmentActivity;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.ui.ArticleListFragment;
 import com.example.jinliangshan.littlezhihu.home.util.FragmentManagerUtil;
-import com.example.jinliangshan.littlezhihu.home.widget.CarouselAdapter;
+import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,15 +24,22 @@ public class MainActivity extends BaseFragmentActivity {
     Fragment mArticleListFragment;
 
     @BindView(R.id.icvp_banner)
-    ViewPager mIcvpBanner;
+    HorizontalInfiniteCycleViewPager mIcvpBanner;
     private BannerAdapter mBannerAdapter;
+    private int mBasePageIndex = -1;    // 第一页的基准下标
 
     @BindBitmap(R.mipmap.ic_launcher)
     Bitmap mDefaultBitmap;
 
+    private List<LatestNews.TopArticle> mDefaultBannerDatas = Arrays.asList(
+            new LatestNews.TopArticle(),
+            new LatestNews.TopArticle(),
+            new LatestNews.TopArticle()
+    );
+
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_activity_article;
+        return R.layout.fragment_activity_article_list;
     }
 
     @Override
@@ -47,26 +51,22 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void initView() {
         mBannerAdapter = new BannerAdapter(this);
-        mBannerAdapter.setDataList(Arrays.asList(
-                new LatestNews.TopArticle(),
-                new LatestNews.TopArticle(),
-                new LatestNews.TopArticle()
-        ));
-        // HorizontalInfiniteCycleViewPager 有个 bug
-        // mBannerAdapter 的数据加载必须先与 setAdapter
         mIcvpBanner.setAdapter(mBannerAdapter);
+        upDateBanner(mDefaultBannerDatas);
 
         mBannerAdapter.setOnTimerSchedule(() -> {
             if(mBannerAdapter == null || mBannerAdapter.getCount() == 0)
                 return ;
             mIcvpBanner.post(() -> {    // 图片轮播, post 到 MainThread
-                Log.i(TAG, "post");
-                mIcvpBanner.setCurrentItem(
-                        (mIcvpBanner.getCurrentItem()+1) % mBannerAdapter.getCount()
-                );
+                int nextPageOffset = mIcvpBanner.getRealItem()+1;   // getRealItem() 代替 getCurrentItem()
+                Log.i(TAG, "select: " + nextPageOffset);
+                mIcvpBanner.setCurrentItem(nextPageOffset);
             });
         });
-        mBannerAdapter.start();
+
+        if(mBasePageIndex == -1)
+            mBasePageIndex = mIcvpBanner.getCurrentItem();
+        debugPageIndex();
     }
 
     @Override
@@ -83,9 +83,20 @@ public class MainActivity extends BaseFragmentActivity {
                 );
     }
 
+    /**
+     * HorizontalInfiniteCycleViewPager 有个 bug
+     * mBannerAdapter 的数据加载必须先与 setAdapter
+     * @param topStories
+     */
     private void upDateBanner(List topStories){
+        mBannerAdapter.stop();
+
         mBannerAdapter.setDataList(topStories);
         mIcvpBanner.setAdapter(mBannerAdapter);
+        mIcvpBanner.notifyDataSetChanged(); // 用这个代替 adapter 的 notify...()
+        mIcvpBanner.setCurrentItem(0);
+
+        mBannerAdapter.start();
     }
 
     @Override
@@ -100,31 +111,19 @@ public class MainActivity extends BaseFragmentActivity {
         mBannerAdapter.stop();
     }
 
-    public static class BannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
-        @BindView(R.id.iv_image)
-        ImageView mIvImage;
-        @BindView(R.id.cv_banner_item)
-        CardView mCvBannerItem;
+    private void debugPageIndex() {
+        mIcvpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
-        @BindBitmap(R.mipmap.ic_launcher)
-        Bitmap mDefaultBitmap;
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "curPage: " + position + " - " + mIcvpBanner.getCurrentItem() + " - " + mIcvpBanner.getRealItem());
+            }
 
-        public BannerAdapter(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected int getLayoutRes() {
-            return R.layout.item_banner;
-        }
-
-        @Override
-        protected void onBind(LatestNews.TopArticle topArticle, int position) {
-            mIvImage.setImageBitmap(mDefaultBitmap);    // 先显示默认图片, 下面再次异步加载图片
-            if(topArticle.getImage() != null)
-                MyApplication.getInstance().getImageLoader()
-                        .displayImage(topArticle.getImage(), mIvImage);
-        }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
     }
 }
 

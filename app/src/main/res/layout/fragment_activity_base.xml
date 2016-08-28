@@ -7,13 +7,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.MainActivity">
 
-    <!--<include layout="@layout/toolbar_common"/>-->
+    <include layout="@layout/toolbar_common"/>
 
-    <!--<fragment-->
-        <!--android:id="@+id/fragment_home_list"-->
-        <!--class="com.example.jinliangshan.littlezhihu.home.ui.ArticleListFragment"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
     <LinearLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

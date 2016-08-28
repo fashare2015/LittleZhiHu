@@ -2,8 +2,8 @@ package com.example.jinliangshan.littlezhihu.home;
 
 import android.app.Application;
 
+import com.example.jinliangshan.littlezhihu.home.imageloader.ImageLoaderUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 /**
  * User: fashare(153614131@qq.com)
@@ -35,6 +35,6 @@ public class MyApplication extends Application {
     private void initImageLoader() {
         // Create global configuration and initialize ImageLoader with this config
         mImageLoader = ImageLoader.getInstance();
-        mImageLoader.init(new ImageLoaderConfiguration.Builder(this).build());
+        mImageLoader.init(ImageLoaderUtil.getSimpleConfig(this));
     }
 }

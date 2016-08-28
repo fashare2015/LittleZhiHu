@@ -1,10 +1,24 @@
 package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.Toolbar;
 
 import com.example.jinliangshan.littlezhihu.R;
 
-public abstract class BaseFragmentActivity extends BaseActivity implements BaseFragment.OnLoadDataListener{
+import butterknife.BindView;
+import pl.droidsonroids.gif.GifImageView;
+
+public abstract class BaseFragmentActivity extends BaseActivity implements BaseFragment.OnLoadDataListener {
+
+    // toolBar
+    @Nullable @BindView(R.id.iv_banner)
+    protected GifImageView mIvBanner;
+    @Nullable @BindView(R.id.tb_common)
+    Toolbar mTbCommon;
+    @Nullable @BindView(R.id.layout_common_toolbar)
+    CollapsingToolbarLayout mLayoutCommonToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +34,11 @@ public abstract class BaseFragmentActivity extends BaseActivity implements BaseF
     }
 
     @Override
-    protected void initView() {}
+    protected void initView() {
+    }
 
     @Override
-    protected void loadData() {}
+    protected void loadData() {
+    }
 }
 

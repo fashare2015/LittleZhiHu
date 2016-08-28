@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.IntDef;
 import android.util.Log;
 
+import com.example.jinliangshan.littlezhihu.home.base.BasePagerAdapter;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.Executors;

@@ -15,8 +15,7 @@ import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
 import com.example.jinliangshan.littlezhihu.home.model.Article;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import butterknife.BindBitmap;
 import butterknife.BindView;
@@ -48,7 +47,7 @@ public class ArticleListAdapter extends BaseRecyclerViewAdapter<Article> {
         @BindView(R.id.tv_title)
         TextView mTvTitle;
 
-        @BindBitmap(R.mipmap.ic_launcher)
+        @BindBitmap(R.drawable.img_default)
         Bitmap mDefaultBitmap;
 
         Bitmap bitmap;
@@ -76,27 +75,12 @@ public class ArticleListAdapter extends BaseRecyclerViewAdapter<Article> {
                 }else{
                     Log.i(TAG, "get bitmap " + pos + " from network");
                     MyApplication.getInstance().getImageLoader()
-                            .loadImage(url, new ImageLoadingListener() {
-                                @Override
-                                public void onLoadingStarted(String imageUri, View view) {
-
-                                }
-
-                                @Override
-                                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-                                }
-
+                            .loadImage(url, new SimpleImageLoadingListener() {
                                 @Override
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                                     bitmap = loadedImage;
                                     mBitmapCache.put(pos + "", bitmap); // 缓存图片
                                     mIvImage.setImageBitmap(bitmap);
-                                }
-
-                                @Override
-                                public void onLoadingCancelled(String imageUri, View view) {
-
                                 }
                             });
                 }

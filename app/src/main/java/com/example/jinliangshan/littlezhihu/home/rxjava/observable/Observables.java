@@ -1,11 +1,10 @@
-package com.example.jinliangshan.littlezhihu.home.rxjava;
+package com.example.jinliangshan.littlezhihu.home.rxjava.observable;
 
 
 import com.annimon.stream.Stream;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.network.OkHttpUtil;
 import com.example.jinliangshan.littlezhihu.home.network.api.Apis;
-import com.example.jinliangshan.littlezhihu.home.rxjava.observable.ObservableUtil;
 import com.google.gson.Gson;
 
 import rx.Observable;

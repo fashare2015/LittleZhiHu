@@ -1,4 +1,4 @@
-package com.example.jinliangshan.littlezhihu.home.widget;
+package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.support.v7.widget.RecyclerView;
 

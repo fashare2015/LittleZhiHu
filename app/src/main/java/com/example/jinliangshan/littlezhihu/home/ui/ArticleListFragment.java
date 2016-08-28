@@ -7,21 +7,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
+import com.example.jinliangshan.littlezhihu.home.base.BaseOnScrollListener;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
+import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
 import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
-import com.example.jinliangshan.littlezhihu.home.widget.BaseOnScrollListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
@@ -29,10 +27,10 @@ import rx.Observable;
 
 public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener{
 
-    @BindView(R.id.layout_common_toolbar)
-    public LinearLayout mLayoutCommonToolbar;
-    @BindView(R.id.tb_common)
-    public Toolbar mTbCommon;
+//    @BindView(R.id.layout_common_toolbar)
+//    public CollapsingToolbarLayout mLayoutCommonToolbar;
+//    @BindView(R.id.tb_common)
+//    public Toolbar mTbCommon;
 
     @BindView(R.id.rv_article_list)
     RecyclerView mRvArticleList;
@@ -40,7 +38,8 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 
     @BindView(R.id.fab_menu)
     FloatingActionButton mFabMenu;
-    private HidingAnimUtil mTbHidingAnimUtil, mFabHidingAnimUtil;
+//    private HidingAnimUtil mTbHidingAnimUtil;
+    private HidingAnimUtil mFabHidingAnimUtil;
 
     @Override
     protected int getLayoutRes() {
@@ -96,8 +95,8 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
     }
 
     private void initAnim() {
-        mTbHidingAnimUtil = new HidingAnimUtil(mLayoutCommonToolbar)
-                .setHidingMod(HidingAnimUtil.HIDING_MOD_TOP);
+//        mTbHidingAnimUtil = new HidingAnimUtil(mLayoutCommonToolbar)
+//                .setHidingMod(HidingAnimUtil.HIDING_MOD_TOP);
         mFabHidingAnimUtil = new HidingAnimUtil(mFabMenu)
                 .setHidingMod(HidingAnimUtil.HIDING_MOD_BOTTOM);
     }
@@ -121,13 +120,13 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         @Override
         public void onScrolledUp(int dy) {
             Log.d("ArticleListFragment", "onScrolledUp");
-            mTbHidingAnimUtil.hide();
+//            mTbHidingAnimUtil.hide();
             mFabHidingAnimUtil.hide();
         }
 
         @Override
         public void onScrolledDown(int dy) {
-            mTbHidingAnimUtil.show();
+//            mTbHidingAnimUtil.show();
             mFabHidingAnimUtil.show();
         }
 

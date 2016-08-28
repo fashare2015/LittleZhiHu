@@ -12,6 +12,8 @@ import rx.schedulers.Schedulers;
  * Created by jinliangshan on 16/8/26.
  */
 public class ObservableUtil {
+    private ObservableUtil(){}
+
     /**
      * newInstance: 创建一个 Observable
      * @param onLoadData 数据来源接口
