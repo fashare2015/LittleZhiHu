@@ -18,6 +18,7 @@ import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
+import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersDecoration;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
@@ -46,8 +47,10 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
     protected void initView(View view) {
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
+        mRvArticleList.addItemDecoration(new StickyRecyclerHeadersDecoration(mArticleAdapter));
 
         mArticleAdapter.setOnItemClickListener(this);
+        mArticleAdapter.setOnHeaderClickListener((header, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
 
         initAnim(); // 等 view 的相对布局已定
@@ -93,7 +96,7 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         // 隐藏 toolBar
         @Override
         public void onScrolledUp(int dy) {
-            Log.d("ArticleListFragment", "onScrolledUp");
+            Log.i("ArticleListFragment", "onScrolledUp");
 //            mTbHidingAnimUtil.hide();
 //            mFabHidingAnimUtil.hide();
         }

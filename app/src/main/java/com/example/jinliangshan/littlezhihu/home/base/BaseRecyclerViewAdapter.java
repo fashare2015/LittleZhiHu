@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
  * Created by jinliangshan on 16/8/25.
  */
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>{
+    private static final String TAG = "BaseRecyclerViewAdapter";
     protected Context mContext;
     private List<T> mDataList;
     private OnItemClickListener mOnItemClickListener;
@@ -38,10 +39,8 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     @Override
     public BaseViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(parent, viewType);
+        throw new RuntimeException(TAG + ": must override onCreateViewHolder()");
     }
-
-    protected abstract BaseViewHolder<T> getViewHolder(ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
