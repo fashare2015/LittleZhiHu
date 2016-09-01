@@ -19,6 +19,7 @@ import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersDecoration;
+import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersTouchListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
@@ -45,13 +46,18 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 
     @Override
     protected void initView(View view) {
+        StickyRecyclerHeadersDecoration itemDecoration;
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
-        mRvArticleList.addItemDecoration(new StickyRecyclerHeadersDecoration(mArticleAdapter));
+        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
 
         mArticleAdapter.setOnItemClickListener(this);
-        mArticleAdapter.setOnHeaderClickListener((header, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
+//        mArticleAdapter.setOnHeaderClickListener((header, headerId) -> Toast.makeText(mContext, "adapter: headId = " + headerId, Toast.LENGTH_SHORT).show());
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
+
+        StickyRecyclerHeadersTouchListener touchListener = new StickyRecyclerHeadersTouchListener(mRvArticleList, itemDecoration);
+        touchListener.setOnHeaderClickListener((header, position, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
+        mRvArticleList.addOnItemTouchListener(touchListener);
 
         initAnim(); // 等 view 的相对布局已定
     }

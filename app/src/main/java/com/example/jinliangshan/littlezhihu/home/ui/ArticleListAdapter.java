@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -96,8 +97,10 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
 
     // --- header ---
     // example: 2个一组
+
     /**
      * 分组类别 -> 该组起始位置 {0 => 0, 1 => 2, 2 => 4, 3 => 6, ....}
+     *
      * @param section
      * @return
      */
@@ -108,6 +111,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
 
     /**
      * 位置 -> 分组类别 {0 => 0, 1 => 0, 2 => 1, 3 => 1, ....}
+     *
      * @param pos
      * @return
      */
@@ -123,11 +127,19 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
     }
 
     public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<Article> {
+        private static final String TAG = "ArticleHeaderViewHolder";
         @BindView(R.id.tv_title)
         TextView mTvTitle;
 
+        @BindView(R.id.btn)
+        Button mBtn;
+
         public ArticleHeaderViewHolder(View itemView) {
             super(itemView);
+            mBtn.setOnClickListener(view -> {
+                Log.i(TAG, "click btn");
+
+            });
         }
 
         @Override

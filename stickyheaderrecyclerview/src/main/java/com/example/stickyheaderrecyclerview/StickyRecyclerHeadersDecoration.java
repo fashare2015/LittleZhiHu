@@ -9,6 +9,9 @@ import android.view.View;
 import com.example.stickyheaderrecyclerview.cache.HeaderProvider;
 import com.example.stickyheaderrecyclerview.cache.HeaderViewCache;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by jinliangshan on 16/8/30.
  */
@@ -17,6 +20,7 @@ public class StickyRecyclerHeadersDecoration extends RecyclerView.ItemDecoration
 
     private StickyRecyclerHeadersAdapter mAdapter;
     private HeaderProvider mHeaderProvider;
+    public final Map<Integer, Rect> mHeaderRectCache = new HashMap<>();
 
     public StickyRecyclerHeadersDecoration(StickyRecyclerHeadersAdapter adapter) {
         mAdapter = adapter;
@@ -47,18 +51,24 @@ public class StickyRecyclerHeadersDecoration extends RecyclerView.ItemDecoration
 
             View headerView = getHeader(parent, pos);
 
-            final View child = parent.getChildAt(pos);
-            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-            final int bottom = child.getTop() - params.topMargin;
-            final int top = bottom - headerView.getHeight();
+            Rect headRect = mHeaderRectCache.get(pos);  // 复用
+            if(headRect == null){
+                final View child = parent.getChildAt(pos);
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+                final int bottom = child.getTop() - params.topMargin;
+                final int top = bottom - headerView.getHeight();
 
-            drawHeader(canvas, parent, pos, new Rect(left, top, right, bottom));    // 给定一个 headOffset
+                headRect = new Rect(left, top, right, bottom);
+                mHeaderRectCache.put(pos, headRect);
+            }
+
+            drawHeader(canvas, parent, pos, headRect);    // headRect: 指定 head 的区域
         }
     }
 
-    public void drawHeader(Canvas canvas, RecyclerView parent, int position, Rect headOffset) {
+    public void drawHeader(Canvas canvas, RecyclerView parent, int position, Rect headRect) {
         canvas.save();
-        canvas.translate(headOffset.left, headOffset.top);
+        canvas.translate(headRect.left, headRect.top);
         getHeader(parent, position).draw(canvas);
         canvas.restore();
     }

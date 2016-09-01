@@ -13,7 +13,7 @@ buildscript {
 
 // external 全局变量
 ext{
-    compileSdkVersion = 24
+    compileSdkVersion = 23
     buildToolsVersion = '24.0.1'
 
     minSdkVersion = 15
