@@ -1,28 +1,68 @@
 package com.example.jinliangshan.littlezhihu.home.model;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 /**
- * Created by jinliangshan on 16/8/25.
- *
- *
+ * User: fashare(153614131@qq.com)
+ * Date: 2016-09-06
+ * Time: 00:20
+ * <br/><br/>
  */
-public class Article{
+public class Article {
+
     /**
-     * title : 中国古代家具发展到今天有两个高峰，一个两宋一个明末（多图）
-     * ga_prefix : 052321
-     * images : ["http://p1.zhimg.com/45/b9/45b9f057fc1957ed2c946814342c0f02.jpg"]
+     * body : <div></div>
+     * image_source : Yestone.com 版权图片库
+     * title : 深夜惊奇 · 朋友圈错觉
+     * image : 1.jpg
+     * share_url :
+     * js : []
+     * recommenders : [{"avatar":"1.jpg"},{"avatar":"1.jpg"},{"avatar":"1.jpg"},{"avatar":"1.jpg"},{"avatar":"1.jpg"}]
+     * ga_prefix : 050615
+     * section : {"thumbnail":"1.jpg","id":1,"name":"深夜惊奇"}
      * type : 0
-     * id : 3930445
+     * id : 4772126
+     * css : ["http://news.at.zhihu.com/css/news_qa.auto.css?v=1edab"]
      */
 
+    private String body;
+    private String image_source;
     private String title;
+    private String image;
+    private String share_url;
     private String ga_prefix;
+    /**
+     * thumbnail : 1.jpg
+     * id : 1
+     * name : 深夜惊奇
+     */
+
+    private SectionBean section;
     private int type;
     private int id;
-    private List<String> images;
+    private List<?> js;
+    /**
+     * avatar : 1.jpg
+     */
+
+    private List<RecommendersBean> recommenders;
+    private List<String> css;
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getImage_source() {
+        return image_source;
+    }
+
+    public void setImage_source(String image_source) {
+        this.image_source = image_source;
+    }
 
     public String getTitle() {
         return title;
@@ -32,12 +72,36 @@ public class Article{
         this.title = title;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getShare_url() {
+        return share_url;
+    }
+
+    public void setShare_url(String share_url) {
+        this.share_url = share_url;
+    }
+
     public String getGa_prefix() {
         return ga_prefix;
     }
 
     public void setGa_prefix(String ga_prefix) {
         this.ga_prefix = ga_prefix;
+    }
+
+    public SectionBean getSection() {
+        return section;
+    }
+
+    public void setSection(SectionBean section) {
+        this.section = section;
     }
 
     public int getType() {
@@ -56,16 +120,69 @@ public class Article{
         this.id = id;
     }
 
-    public List<String> getImages() {
-        return images;
+    public List<?> getJs() {
+        return js;
     }
 
-    public void setImages(List<String> images) {
-        this.images = images;
+    public void setJs(List<?> js) {
+        this.js = js;
     }
 
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
+    public List<RecommendersBean> getRecommenders() {
+        return recommenders;
+    }
+
+    public void setRecommenders(List<RecommendersBean> recommenders) {
+        this.recommenders = recommenders;
+    }
+
+    public List<String> getCss() {
+        return css;
+    }
+
+    public void setCss(List<String> css) {
+        this.css = css;
+    }
+
+    public static class SectionBean {
+        private String thumbnail;
+        private int id;
+        private String name;
+
+        public String getThumbnail() {
+            return thumbnail;
+        }
+
+        public void setThumbnail(String thumbnail) {
+            this.thumbnail = thumbnail;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    public static class RecommendersBean {
+        private String avatar;
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
     }
 }

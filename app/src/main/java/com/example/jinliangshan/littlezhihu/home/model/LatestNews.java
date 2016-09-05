@@ -16,7 +16,7 @@ public class LatestNews {
      */
 
     private String date = "aaaaa";
-    private List<Article> stories;
+    private List<ArticlePreview> stories;
     private List<TopArticle> top_stories;
 
     public String getDate() {
@@ -27,11 +27,11 @@ public class LatestNews {
         this.date = date;
     }
 
-    public List<Article> getStories() {
+    public List<ArticlePreview> getStories() {
         return stories;
     }
 
-    public void setStories(List<Article> stories) {
+    public void setStories(List<ArticlePreview> stories) {
         this.stories = stories;
     }
 

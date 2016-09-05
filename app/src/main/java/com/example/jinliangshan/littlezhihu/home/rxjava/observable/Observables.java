@@ -2,6 +2,7 @@ package com.example.jinliangshan.littlezhihu.home.rxjava.observable;
 
 
 import com.annimon.stream.Stream;
+import com.example.jinliangshan.littlezhihu.home.model.Article;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.network.OkHttpUtil;
 import com.example.jinliangshan.littlezhihu.home.network.api.Apis;
@@ -21,6 +22,12 @@ public class Observables {
     public static Observable<LatestNews> getLatestNewsObservable(){
         return ObservableUtil.newInstance(() ->
                 loadDataFrom(Apis.URL_LATEST_NEWS, LatestNews.class)
+        );
+    }
+
+    public static Observable<Article> getArticleObservable(int articleId){
+        return ObservableUtil.newInstance(() ->
+                loadDataFrom(Apis.URL_NEWS + articleId, Article.class)
         );
     }
 

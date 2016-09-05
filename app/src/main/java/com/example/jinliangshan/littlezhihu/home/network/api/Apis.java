@@ -6,7 +6,8 @@ package com.example.jinliangshan.littlezhihu.home.network.api;
 public class Apis {
     private static final String BASE_URL = "http://news.at.zhihu.com/api/4/";
 
-    public static final String URL_LATEST_NEWS = BASE_URL + "news/latest";
+    public static final String URL_NEWS = BASE_URL + "news/";
+    public static final String URL_LATEST_NEWS = URL_NEWS + "latest";
 
     private Apis(){}
 

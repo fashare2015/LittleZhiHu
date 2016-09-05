@@ -1,9 +1,5 @@
 package com.example.jinliangshan.littlezhihu.home.ui;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,17 +11,16 @@ import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
 import com.example.jinliangshan.littlezhihu.home.base.BaseOnScrollListener;
 import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
+import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
-import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersDecoration;
-import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersTouchListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
 import rx.Observable;
 
-public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener{
+public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener<ArticlePreview>{
 
 //    @BindView(R.id.layout_common_toolbar)
 //    public CollapsingToolbarLayout mLayoutCommonToolbar;
@@ -49,15 +44,15 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         StickyRecyclerHeadersDecoration itemDecoration;
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
-        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
+//        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
 
         mArticleAdapter.setOnItemClickListener(this);
 //        mArticleAdapter.setOnHeaderClickListener((header, headerId) -> Toast.makeText(mContext, "adapter: headId = " + headerId, Toast.LENGTH_SHORT).show());
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
 
-        StickyRecyclerHeadersTouchListener touchListener = new StickyRecyclerHeadersTouchListener(mRvArticleList, itemDecoration);
-        touchListener.setOnHeaderClickListener((header, position, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
-        mRvArticleList.addOnItemTouchListener(touchListener);
+//        StickyRecyclerHeadersTouchListener touchListener = new StickyRecyclerHeadersTouchListener(mRvArticleList, itemDecoration);
+//        touchListener.setOnHeaderClickListener((header, position, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
+//        mRvArticleList.addOnItemTouchListener(touchListener);
 
         initAnim(); // 等 view 的相对布局已定
     }
@@ -65,8 +60,7 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
     @Override
     protected void loadData() {
         final Observable<LatestNews> observable = Observables.getLatestNewsObservable();
-                observable
-                .map(LatestNews:: getStories)
+                observable.map(LatestNews:: getStories)
                 .doOnNext(articles -> dispatch(observable)) // 下发 observable 给 activity
                 .subscribe(
                         // onNext, 请求成功
@@ -85,11 +79,8 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
     }
 
     @Override
-    public void onItemClick(View itemView, int position) {
-        Activity activity = getActivity();
-        Intent intent = new Intent(activity, ArticleActivity.class);
-        Bundle options = TransitionUtils.makeActivityOptionsBundle(activity, itemView);
-        ActivityCompat.startActivity(activity, intent, options);
+    public void onItemClick(View itemView, ArticlePreview data, int position) {
+        ArticleActivity.startThis(getActivity(), data.getId(), itemView);
     }
 
     /**

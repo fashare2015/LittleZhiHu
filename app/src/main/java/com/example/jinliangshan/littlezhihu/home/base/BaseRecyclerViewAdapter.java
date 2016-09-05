@@ -17,7 +17,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     private static final String TAG = "BaseRecyclerViewAdapter";
     protected Context mContext;
     private List<T> mDataList;
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener<T> mOnItemClickListener;
 
     public List<T> getDataList() {
         return mDataList;
@@ -28,7 +28,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         this.notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -47,7 +47,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         holder.onBind(getDataList().get(position), position);
         holder.itemView.setOnClickListener(view -> {
             if(mOnItemClickListener != null)
-                mOnItemClickListener.onItemClick(holder.itemView, position);
+                mOnItemClickListener.onItemClick(holder.itemView, getDataList().get(position), position);
         });
     }
 
@@ -74,7 +74,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         public abstract void onRecycled();
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(View itemView, int position);
+    public interface OnItemClickListener<T>{
+        void onItemClick(View itemView, T data, int position);
     }
 }

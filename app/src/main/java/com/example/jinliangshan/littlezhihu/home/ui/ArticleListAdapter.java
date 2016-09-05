@@ -15,7 +15,7 @@ import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseHeaderRecyclerViewAdapter;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
-import com.example.jinliangshan.littlezhihu.home.model.Article;
+import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import butterknife.BindBitmap;
@@ -24,7 +24,7 @@ import butterknife.BindView;
 /**
  * Created by jinliangshan on 16/8/25.
  */
-public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
+public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<ArticlePreview> {
 
     private BitmapCache mBitmapCache = new BitmapCache();
     // 一个 adapter 持有一个 cache, 为 viewHolder 所共有
@@ -34,12 +34,12 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
     }
 
     @Override
-    public BaseViewHolder<Article> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<ArticlePreview> onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_article, parent, false);
         return new ArticleViewHolder(itemView);
     }
 
-    public class ArticleViewHolder extends BaseViewHolder<Article> {
+    public class ArticleViewHolder extends BaseViewHolder<ArticlePreview> {
         private static final String TAG = "ArticleViewHolder";
         @BindView(R.id.cv_article)
         CardView mCvArticle;
@@ -64,7 +64,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
         }
 
         @Override
-        public void onBind(Article data, int pos) {
+        public void onBind(ArticlePreview data, int pos) {
             mTvTitle.setText(data.getTitle());
             mIvImage.setImageBitmap(mDefaultBitmap);    // 先显示默认图片, 下面再次异步加载图片
             if (data.getImages().size() > 0) {
@@ -121,12 +121,12 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
     }
 
     @Override
-    public BaseHeaderViewHolder<Article> onCreateHeaderViewHolder(ViewGroup parent) {
+    public BaseHeaderViewHolder<ArticlePreview> onCreateHeaderViewHolder(ViewGroup parent) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.header, parent, false);
         return new ArticleHeaderViewHolder(itemView);
     }
 
-    public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<Article> {
+    public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<ArticlePreview> {
         private static final String TAG = "ArticleHeaderViewHolder";
         @BindView(R.id.tv_title)
         TextView mTvTitle;
@@ -143,7 +143,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<Article> {
         }
 
         @Override
-        public void onBind(Article data, int pos) {
+        public void onBind(ArticlePreview data, int pos) {
             mTvTitle.setText(String.valueOf(getSectionForPosition(pos)));
         }
 
