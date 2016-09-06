@@ -2,7 +2,6 @@ package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import rx.Observable;
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements OnLifeCycle{
     private static final String TAG = "BaseFragment";
     protected Context mContext;
     protected OnLoadDataListener mOnLoadDataListener;
@@ -27,19 +26,16 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(getLayoutRes(), container, false);
     }
 
-    abstract protected @LayoutRes int getLayoutRes();
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-        initView(view);
+        initView();
         loadData();
     }
 
-    protected abstract void initView(View view);
-
-    protected abstract void loadData();
+    @Override
+    public void initBundle() {}
 
     @Override
     public void onAttach(Context context) {

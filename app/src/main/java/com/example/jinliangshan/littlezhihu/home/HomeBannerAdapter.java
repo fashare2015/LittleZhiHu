@@ -36,6 +36,10 @@ public class HomeBannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
 
     Bitmap bitmap;
 
+    public BitmapCache getBitmapCache() {
+        return mBitmapCache;
+    }
+
     public HomeBannerAdapter(Context context) {
         super(context);
     }

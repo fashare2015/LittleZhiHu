@@ -167,19 +167,19 @@ public class TransitionUtils {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Bundle makeActivityOptionsBundle(Activity activity, View... sharedViews) {
-
-        if (!shouldEnableTransition()) {
+        if (!shouldEnableTransition())
             return null;
-        }
 
         ArrayList<Pair<View, String>> sharedElementList = new ArrayList<>();
 
         for (View sharedView : sharedViews) {
-            sharedElementList.add(Pair.create(sharedView, sharedView.getTransitionName()));
+            if(sharedView.getTransitionName() != null)
+                sharedElementList.add(Pair.create(sharedView, sharedView.getTransitionName()));
         }
 
+
         View appbar = activity.findViewById(R.id.layout_common_toolbar);
-        if (appbar != null) {
+        if (appbar != null && appbar.getTransitionName() != null) {
             sharedElementList.add(Pair.create(appbar, appbar.getTransitionName()));
         }
 

@@ -6,7 +6,7 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/iv_banner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:scaleType="centerCrop"/>
 

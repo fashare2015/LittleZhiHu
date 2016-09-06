@@ -1,22 +1,30 @@
 package com.example.jinliangshan.littlezhihu.home.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jinliangshan.littlezhihu.R;
+import com.example.jinliangshan.littlezhihu.home.HomeBannerAdapter;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseHeaderRecyclerViewAdapter;
+import com.example.jinliangshan.littlezhihu.home.base.OnItemClickListener;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
 import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
+import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
+import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindBitmap;
 import butterknife.BindView;
@@ -24,7 +32,7 @@ import butterknife.BindView;
 /**
  * Created by jinliangshan on 16/8/25.
  */
-public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<ArticlePreview> {
+public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<LatestNews.TopArticle>, ArticlePreview>{
 
     private BitmapCache mBitmapCache = new BitmapCache();
     // 一个 adapter 持有一个 cache, 为 viewHolder 所共有
@@ -34,7 +42,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<ArticlePre
     }
 
     @Override
-    public BaseViewHolder<ArticlePreview> onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseViewHolder<ArticlePreview> getViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_article, parent, false);
         return new ArticleViewHolder(itemView);
     }
@@ -96,61 +104,94 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<ArticlePre
     }
 
     // --- header ---
-    // example: 2个一组
-
-    /**
-     * 分组类别 -> 该组起始位置 {0 => 0, 1 => 2, 2 => 4, 3 => 6, ....}
-     *
-     * @param section
-     * @return
-     */
     @Override
-    public int getPositionForSection(int section) {
-        return section * 2;
-    }
-
-    /**
-     * 位置 -> 分组类别 {0 => 0, 1 => 0, 2 => 1, 3 => 1, ....}
-     *
-     * @param pos
-     * @return
-     */
-    @Override
-    public int getSectionForPosition(int pos) {
-        return pos / 2;
-    }
-
-    @Override
-    public BaseHeaderViewHolder<ArticlePreview> onCreateHeaderViewHolder(ViewGroup parent) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.header, parent, false);
+    public BaseHeaderViewHolder<List<LatestNews.TopArticle>> onCreateHeaderViewHolder(ViewGroup parent) {
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.header_home_banner, parent, false);
         return new ArticleHeaderViewHolder(itemView);
     }
 
-    public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<ArticlePreview> {
+    public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<List<LatestNews.TopArticle>>
+            implements OnItemClickListener<LatestNews.TopArticle>{
         private static final String TAG = "ArticleHeaderViewHolder";
-        @BindView(R.id.tv_title)
-        TextView mTvTitle;
+        @BindView(R.id.icvp_banner)
+        HorizontalInfiniteCycleViewPager mIcvpBanner;
+        public HomeBannerAdapter mHomeBannerAdapter;
 
-        @BindView(R.id.btn)
-        Button mBtn;
+        @BindBitmap(R.mipmap.ic_launcher)
+        Bitmap mDefaultBitmap;
+
+        private List<LatestNews.TopArticle> mDefaultBannerDatas = Arrays.asList(
+                new LatestNews.TopArticle(),
+                new LatestNews.TopArticle(),
+                new LatestNews.TopArticle()
+        );
 
         public ArticleHeaderViewHolder(View itemView) {
             super(itemView);
-            mBtn.setOnClickListener(view -> {
-                Log.i(TAG, "click btn");
+            initView();
+        }
 
+        public void initView() {
+            mHomeBannerAdapter = new HomeBannerAdapter(mContext);
+            mIcvpBanner.setAdapter(mHomeBannerAdapter);
+            upDateBanner(mDefaultBannerDatas);
+
+            mHomeBannerAdapter.setOnTimerSchedule(() -> {
+                if(mHomeBannerAdapter == null || mHomeBannerAdapter.getCount() == 0)
+                    return ;
+                mIcvpBanner.post(() -> {    // 图片轮播, post 到 MainThread
+                    int nextPageOffset = mIcvpBanner.getRealItem()+1;   // getRealItem() 代替 getCurrentItem()
+                    Log.i(TAG, "select: " + nextPageOffset);
+                    mIcvpBanner.setCurrentItem(nextPageOffset);
+                });
+            });
+            mHomeBannerAdapter.setOnItemClickListener(this);
+
+            debugPageIndex();
+        }
+
+        @Override
+        public void onBind(List<LatestNews.TopArticle> data, int pos) {
+            upDateBanner(data);
+        }
+
+        @Override
+        public void onItemClick(View itemView, LatestNews.TopArticle data, int position) {
+            ArticleActivity.startThis((Activity) mContext, data.getId(), itemView);
+        }
+
+        /**
+         * HorizontalInfiniteCycleViewPager 有个 bug
+         * mHomeBannerAdapter 的数据加载必须先与 setAdapter
+         * @param topStories
+         */
+        public void upDateBanner(List topStories){
+            mHomeBannerAdapter.stop();
+
+            mHomeBannerAdapter.setDataList(topStories);
+            mIcvpBanner.setAdapter(mHomeBannerAdapter);
+            mIcvpBanner.notifyDataSetChanged(); // 用这个代替 adapter 的 notify...()
+            mIcvpBanner.setCurrentItem(0);
+
+            mHomeBannerAdapter.start();
+        }
+
+        private void debugPageIndex() {
+            mIcvpBanner.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+//                @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                @Override
+                public void onPageSelected(int position) {
+                    Log.i(TAG, "curPage: " + position + " - " + mIcvpBanner.getCurrentItem() + " - " + mIcvpBanner.getRealItem());
+//                    mIcvpBanner.setBackground(new BitmapDrawable(
+//                            mHomeBannerAdapter.getBitmapCache().get(position+"")));
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {}
             });
         }
-
-        @Override
-        public void onBind(ArticlePreview data, int pos) {
-            mTvTitle.setText(String.valueOf(getSectionForPosition(pos)));
-        }
-
-        @Override
-        public void onRecycled() {
-
-        }
     }
-    // ------
 }

@@ -7,18 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".home.HomeActivity">
 
-    <com.example.jinliangshan.littlezhihu.home.widget.CommonToolBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <include layout="@layout/toolbar_simple"/>
 
-    <!-- 为了响应 layout_behavior:
-        NestedScrollView 代替 ScrollView
-        rootview 用 CoordinatorLayout 代替 LinearLayout-->
-    <!--<com.example.jinliangshan.littlezhihu.home.widget.CommonNestedScrollView-->
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"/>
 
 </android.support.design.widget.CoordinatorLayout>

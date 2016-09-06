@@ -1,1 +1,1 @@
-include ':app', ':stickyheaderrecyclerview'
+include ':app'

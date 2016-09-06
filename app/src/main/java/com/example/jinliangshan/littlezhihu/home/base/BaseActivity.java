@@ -1,12 +1,11 @@
 package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements OnLifeCycle{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +18,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         loadData();
     }
 
-    protected abstract @LayoutRes int getLayoutRes();
-
-    protected void initBundle(){}
-
-    protected abstract void initView();
-
-    protected abstract void loadData();
-
+    public void initBundle(){}
 }
 

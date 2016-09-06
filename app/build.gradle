@@ -32,7 +32,6 @@ android {
 }
 
 dependencies {
-    compile project(':stickyheaderrecyclerview')    // 依赖本地 module
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibsVersion}"
@@ -72,8 +71,8 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.1.0'
 
     // rxlifecycle
-    compile 'com.trello:rxlifecycle:0.4.0'
-    compile 'com.trello:rxlifecycle-components:0.4.0'
+//    compile 'com.trello:rxlifecycle:0.4.0'
+//    compile 'com.trello:rxlifecycle-components:0.4.0'
 
     // stream: java8 第三方 stream
     compile 'com.annimon:stream:1.0.9'

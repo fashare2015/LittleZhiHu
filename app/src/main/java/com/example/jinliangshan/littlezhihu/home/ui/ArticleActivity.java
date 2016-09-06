@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragmentActivity;
+import com.example.jinliangshan.littlezhihu.home.model.Article;
 import com.example.jinliangshan.littlezhihu.home.util.FragmentManagerUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 
@@ -24,7 +25,7 @@ public class ArticleActivity extends BaseFragmentActivity {
     public static final String ARTICLE_ID = "ARTICLE_ID";
 
     private Fragment mArticleFragment;
-    private Fragment mArticleBannerFragment;
+    private ArticleBannerFragment mArticleBannerFragment;
 
     @BindBitmap(R.mipmap.ic_launcher)
     Bitmap mDefaultBitmap;
@@ -32,7 +33,7 @@ public class ArticleActivity extends BaseFragmentActivity {
     private int mArticleId;
 
     @Override
-    protected void initBundle() {
+    public void initBundle() {
         mArticleId = getIntent().getIntExtra(ARTICLE_ID, 0);
     }
 
@@ -45,12 +46,12 @@ public class ArticleActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected void initView() {
+    public void initView() {
 //        load(this, R.drawable.banner_default, mIvBanner);
     }
 
     @Override
-    protected void loadData() {
+    public void loadData() {
 
     }
 
@@ -60,7 +61,13 @@ public class ArticleActivity extends BaseFragmentActivity {
 
     @Override
     public void loadingFromFragment(Observable<?> dataObservable) {
+        dataObservable.cast(Article.class)
+                .map(Article:: getImage)
+                .subscribe(this:: notifyBannerUpdate);
+    }
 
+    private void notifyBannerUpdate(String imgUrl){
+        mArticleBannerFragment.upDateBanner(imgUrl);
     }
 
     public static void startThis(Activity from, int articleId, View... sharedViews){

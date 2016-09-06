@@ -13,14 +13,21 @@ import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
+import com.example.jinliangshan.littlezhihu.home.model.Article;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
 
 import butterknife.BindView;
+import rx.Observable;
 
 /**
  * Created by jinliangshan on 16/8/26.
  */
 public class ArticleFragment extends BaseFragment {
+    private static final String TAG = "ArticleFragment";
+
+    public static final String CSS_URL = "file:///android_asset/" + "style.css";
+    public static final String USE_CSS_LINK = String.format("<link rel=\"stylesheet\"" +
+            " type=\"text/css\" href=\"%s\" />", CSS_URL);
 
     @BindView(R.id.wv_article)
     WebView mWvArticle;
@@ -43,30 +50,28 @@ public class ArticleFragment extends BaseFragment {
     }
 
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutRes() {
         return R.layout.fragment_article;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    protected void initView(View view) {
+    public void initView() {
         mWebSettings = mWvArticle.getSettings();
         mWebSettings.setDefaultTextEncodingName("utf-8");
         mWebSettings.setJavaScriptEnabled(true);
     }
 
     @Override
-    protected void loadData() {
-        Observables.getArticleObservable(mArticleId)
+    public void loadData() {
+        final Observable<Article> observable = Observables.getArticleObservable(mArticleId);
+                observable.doOnNext(article -> dispatch(observable)) // 下发 observable 给 activity
                 .subscribe(
                         // onNext, 请求成功
                         article -> {
-                            Log.i("aaaaa", article.getCss().get(0));
-//                            String cssUrl = article.getCss()!=null? article.getCss().get(0): null;
-                            String htmlData = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />" + article.getBody();
-                            String cssUrl = "file:///android_asset/";
-                            mWvArticle.loadDataWithBaseURL(cssUrl,
-                                    htmlData,
+                            Log.i(TAG, article.getCss().get(0));
+                            mWvArticle.loadDataWithBaseURL(null,
+                                    USE_CSS_LINK + article.getBody(),
                                     "text/html", "UTF-8", null);
                         },
                         // onError, 请求失败

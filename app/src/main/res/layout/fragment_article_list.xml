@@ -10,16 +10,8 @@
         android:id="@+id/rv_article_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="?android:attr/actionBarSize"
         android:clipToPadding="false"/>
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
     <!-- padding 但仍然 match_parent: clipToPadding false-->
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab_menu"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="bottom|right"-->
-        <!--android:layout_margin="@dimen/fab_margin"-->
-        <!--app:backgroundTint="@color/colorPrimary"/>-->
 
 </android.support.design.widget.CoordinatorLayout>

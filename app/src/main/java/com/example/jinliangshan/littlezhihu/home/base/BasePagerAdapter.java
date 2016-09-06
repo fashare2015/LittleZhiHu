@@ -23,7 +23,7 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
     protected Context mContext;
     private List<T> mDataList;
     private List<View> mViewList;
-    private OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener<T> mOnItemClickListener;
 
     protected View mItemView;
 
@@ -36,7 +36,7 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener<T> onItemClickListener) {
         mOnItemClickListener = onItemClickListener;
     }
 
@@ -64,7 +64,8 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
 
         onBind(mDataList.get(position), position);
         if(mOnItemClickListener != null)
-            mItemView.setOnClickListener(v -> mOnItemClickListener.onItemClick(mItemView, position));
+            mItemView.setOnClickListener(v -> mOnItemClickListener
+                    .onItemClick(mItemView, mDataList.get(position), position));
 
         return mItemView;   // 返回 view 作为 key
     }
@@ -90,7 +91,4 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
         return key == view;
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(View itemView, int position);
-    }
-}  
+}

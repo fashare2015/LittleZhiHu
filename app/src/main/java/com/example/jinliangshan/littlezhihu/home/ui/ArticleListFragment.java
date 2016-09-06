@@ -10,17 +10,15 @@ import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
 import com.example.jinliangshan.littlezhihu.home.base.BaseOnScrollListener;
-import com.example.jinliangshan.littlezhihu.home.base.BaseRecyclerViewAdapter;
+import com.example.jinliangshan.littlezhihu.home.base.OnItemClickListener;
 import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
-import com.example.stickyheaderrecyclerview.StickyRecyclerHeadersDecoration;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
-import rx.Observable;
 
-public class ArticleListFragment extends BaseFragment implements BaseRecyclerViewAdapter.OnItemClickListener<ArticlePreview>{
+public class ArticleListFragment extends BaseFragment implements OnItemClickListener<ArticlePreview> {
 
 //    @BindView(R.id.layout_common_toolbar)
 //    public CollapsingToolbarLayout mLayoutCommonToolbar;
@@ -29,19 +27,20 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
     RecyclerView mRvArticleList;
     private ArticleListAdapter mArticleAdapter;
 
-//    @BindView(R.id.fab_menu)
-//    FloatingActionButton mFabMenu;
-//    private HidingAnimUtil mTbHidingAnimUtil;
-//    private HidingAnimUtil mFabHidingAnimUtil;
+    private OnArticleListScrollListener mOnArticleListScrollListener;
+
+    public void setOnArticleListScrollListener(OnArticleListScrollListener onArticleListScrollListener) {
+        mOnArticleListScrollListener = onArticleListScrollListener;
+    }
 
     @Override
-    protected int getLayoutRes() {
+    public int getLayoutRes() {
         return R.layout.fragment_article_list;
     }
 
     @Override
-    protected void initView(View view) {
-        StickyRecyclerHeadersDecoration itemDecoration;
+    public void initView() {
+//        StickyRecyclerHeadersDecoration itemDecoration;
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
 //        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
@@ -53,29 +52,32 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
 //        StickyRecyclerHeadersTouchListener touchListener = new StickyRecyclerHeadersTouchListener(mRvArticleList, itemDecoration);
 //        touchListener.setOnHeaderClickListener((header, position, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
 //        mRvArticleList.addOnItemTouchListener(touchListener);
-
-        initAnim(); // 等 view 的相对布局已定
     }
 
     @Override
-    protected void loadData() {
-        final Observable<LatestNews> observable = Observables.getLatestNewsObservable();
-                observable.map(LatestNews:: getStories)
-                .doOnNext(articles -> dispatch(observable)) // 下发 observable 给 activity
+    public void loadData() {
+        Observables.getLatestNewsObservable()
+                .doOnNext(articles -> mArticleAdapter.setHeaderData(articles.getTop_stories()))
+                .map(LatestNews:: getStories)
                 .subscribe(
                         // onNext, 请求成功
-//                        articles -> mArticleAdapter.setDataList(articles),
                         mArticleAdapter:: setDataList,
                         // onError, 请求失败
                         throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_LONG).show()
                 );
     }
 
-    private void initAnim() {
-//        mTbHidingAnimUtil = new HidingAnimUtil(mLayoutCommonToolbar)
-//                .setHidingMod(HidingAnimUtil.HIDING_MOD_TOP);
-//        mFabHidingAnimUtil = new HidingAnimUtil(mFabMenu)
-//                .setHidingMod(HidingAnimUtil.HIDING_MOD_BOTTOM);
+    @Override
+    public void onResume() {
+        super.onResume();
+        // TODO bannerTimer
+//        mArticleAdapter.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+//        mArticleAdapter.stop();
     }
 
     @Override
@@ -94,14 +96,14 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         @Override
         public void onScrolledUp(int dy) {
             Log.i("ArticleListFragment", "onScrolledUp");
-//            mTbHidingAnimUtil.hide();
-//            mFabHidingAnimUtil.hide();
+            if(mOnArticleListScrollListener != null)
+                mOnArticleListScrollListener.onScrolledUp();
         }
 
         @Override
         public void onScrolledDown(int dy) {
-//            mTbHidingAnimUtil.show();
-//            mFabHidingAnimUtil.show();
+            if(mOnArticleListScrollListener != null)
+                mOnArticleListScrollListener.onScrolledDown();
         }
 
         // 优化图片加载
@@ -118,4 +120,8 @@ public class ArticleListFragment extends BaseFragment implements BaseRecyclerVie
         }
     }
 
+    public interface OnArticleListScrollListener{
+        void onScrolledUp();
+        void onScrolledDown();
+    }
 }
