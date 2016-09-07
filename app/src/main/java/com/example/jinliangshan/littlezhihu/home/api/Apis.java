@@ -1,4 +1,4 @@
-package com.example.jinliangshan.littlezhihu.home.network.api;
+package com.example.jinliangshan.littlezhihu.home.api;
 
 /**
  * Created by jinliangshan on 16/8/26.

@@ -12,8 +12,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements Timer{
-    private static final String TAG = "CarouselAdapter";
+/**
+ * 定时适配器
+ * @param <T>
+ */
+public abstract class TimerPagerAdapter<T> extends BasePagerAdapter<T> implements Timer{
+    private static final String TAG = "TimerPagerAdapter";
 
     @IntDef({RESUME, PAUSE, DESTROY})
     @Retention(RetentionPolicy.SOURCE)
@@ -24,7 +28,7 @@ public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements 
     public static final int PAUSE = 1;
     public static final int DESTROY = 2;
     /**
-     * 生命周期状态，保证{@link #mCarouselTimer}在各生命周期选择执行策略
+     * 生命周期状态，保证{@link #mTimer}在各生命周期选择执行策略
      */
     private int mLifeCycle = RESUME;
     /**
@@ -34,7 +38,7 @@ public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements 
     /**
      * 轮播定时器
      */
-    private ScheduledExecutorService mCarouselTimer;
+    private ScheduledExecutorService mTimer;
 
     private OnTimerSchedule mOnTimerSchedule;
 
@@ -42,7 +46,7 @@ public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements 
         mOnTimerSchedule = onTimerSchedule;
     }
 
-    public CarouselAdapter(Context context) {
+    public TimerPagerAdapter(Context context) {
         super(context);
     }
 
@@ -50,28 +54,17 @@ public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements 
         this.mLifeCycle = lifeCycle;
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent ev) {
-//        switch (ev.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//            case MotionEvent.ACTION_MOVE:
-//                mIsTouching = true;
-//                break;
-//            case MotionEvent.ACTION_CANCEL:
-//            case MotionEvent.ACTION_UP:
-//                mIsTouching = false;
-//                break;
-//        }
-//        return super.onTouchEvent(ev);
-//    }
+    public void setTouching(boolean touching) {
+        mIsTouching = touching;
+    }
 
     @Override
     public void start() {
         Log.i(TAG, "start");
         shutdownTimer();
-        mCarouselTimer = Executors.newSingleThreadScheduledExecutor();
+        mTimer = Executors.newSingleThreadScheduledExecutor();
 
-        mCarouselTimer.scheduleAtFixedRate(() -> {
+        mTimer.scheduleAtFixedRate(() -> {
             switch (mLifeCycle) {
                 case RESUME:
                     if (!mIsTouching && getCount() > 1)
@@ -100,10 +93,10 @@ public abstract class CarouselAdapter<T> extends BasePagerAdapter<T> implements 
     }
 
     private void shutdownTimer() {
-        if (mCarouselTimer != null && !mCarouselTimer.isShutdown()) {
-            mCarouselTimer.shutdown();
+        if (mTimer != null && !mTimer.isShutdown()) {
+            mTimer.shutdown();
         }
-        mCarouselTimer = null;
+        mTimer = null;
     }
 
     public interface OnTimerSchedule{

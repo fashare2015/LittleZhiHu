@@ -9,8 +9,8 @@ import android.widget.ImageView;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
-import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.widget.CarouselAdapter;
+import com.example.jinliangshan.littlezhihu.home.model.TopArticle;
+import com.example.jinliangshan.littlezhihu.home.widget.TimerPagerAdapter;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import butterknife.BindBitmap;
@@ -22,7 +22,7 @@ import butterknife.BindView;
  * Time: 19:15
  * <br/><br/>
  */
-public class HomeBannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
+public class HomeBannerAdapter extends TimerPagerAdapter<TopArticle> {
     private static final String TAG = "HomeBannerAdapter";
     private BitmapCache mBitmapCache = new BitmapCache();
 
@@ -50,7 +50,7 @@ public class HomeBannerAdapter extends CarouselAdapter<LatestNews.TopArticle> {
     }
 
     @Override
-    protected void onBind(LatestNews.TopArticle topArticle, int pos) {
+    protected void onBind(TopArticle topArticle, int pos) {
         mIvImage.setImageBitmap(mDefaultBitmap);    // 先显示默认图片, 下面再次异步加载图片
 
         if (topArticle.getImage() != null) {

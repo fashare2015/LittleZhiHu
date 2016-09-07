@@ -7,6 +7,10 @@ import android.view.ViewGroup;
 
 /**
  * Created by jinliangshan on 16/8/25.
+ *
+ * 带 Header 的 adapter
+ * @param <H> Header 的数据类型
+ * @param <T> RecyclerView 的数据类型
  */
 public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerViewAdapter<T>
         implements HeaderAdapter<BaseHeaderRecyclerViewAdapter.BaseHeaderViewHolder<H>>{

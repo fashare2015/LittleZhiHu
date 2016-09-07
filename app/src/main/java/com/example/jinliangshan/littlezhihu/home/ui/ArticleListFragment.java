@@ -9,19 +9,16 @@ import android.widget.Toast;
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
-import com.example.jinliangshan.littlezhihu.home.base.BaseOnScrollListener;
+import com.example.jinliangshan.littlezhihu.home.widget.CommonRecyclerViewOnScrollListener;
 import com.example.jinliangshan.littlezhihu.home.base.OnItemClickListener;
 import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
+import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
 
 public class ArticleListFragment extends BaseFragment implements OnItemClickListener<ArticlePreview> {
-
-//    @BindView(R.id.layout_common_toolbar)
-//    public CollapsingToolbarLayout mLayoutCommonToolbar;
 
     @BindView(R.id.rv_article_list)
     RecyclerView mRvArticleList;
@@ -91,7 +88,7 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
      * 隐藏 toolBar 和 优化图片加载
      * </p>
      */
-    private class MyOnScrollListener extends BaseOnScrollListener {
+    private class MyOnScrollListener extends CommonRecyclerViewOnScrollListener {
         // 隐藏 toolBar
         @Override
         public void onScrolledUp(int dy) {

@@ -6,15 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
-import com.example.jinliangshan.littlezhihu.home.model.Article;
-import com.example.jinliangshan.littlezhihu.home.rxjava.observable.Observables;
+import com.example.jinliangshan.littlezhihu.home.model.ArticleDetail;
+import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
 
 import butterknife.BindView;
 import rx.Observable;
@@ -64,7 +63,7 @@ public class ArticleFragment extends BaseFragment {
 
     @Override
     public void loadData() {
-        final Observable<Article> observable = Observables.getArticleObservable(mArticleId);
+        final Observable<ArticleDetail> observable = Observables.getArticleObservable(mArticleId);
                 observable.doOnNext(article -> dispatch(observable)) // 下发 observable 给 activity
                 .subscribe(
                         // onNext, 请求成功

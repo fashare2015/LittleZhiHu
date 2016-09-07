@@ -1,8 +1,5 @@
-package com.example.jinliangshan.littlezhihu.home.rxjava.observable;
+package com.example.jinliangshan.littlezhihu.home.rxjava;
 
-
-import com.example.jinliangshan.littlezhihu.home.rxjava.CommonOnSubscribe;
-import com.example.jinliangshan.littlezhihu.home.network.loaddata.OnLoadData;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,5 +26,13 @@ public class ObservableUtil {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
                 // 被观察的对象在 io 线程进行网络请求，也可以自己新开一个线程
+    }
+
+    /**
+     * 获取 data: 来自网络任务或是别的...
+     * @param <T> data 类型
+     */
+    public interface OnLoadData<T>{
+        T loadData();
     }
 }

@@ -13,9 +13,9 @@
         <!--Status bar color-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--Window color-->
-        <item name="android:windowBackground">@android:color/darker_gray</item>
+        <item name="android:windowBackground">@color/lighter_gray</item>
         <!--设置波纹颜色-->
-        <item name="android:colorControlHighlight">@color/colorControlHighlight</item>
+        <item name="android:colorControlHighlight">@color/lighter_gray</item>
         <!--设置checkbox等控件的选中颜色-->
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>

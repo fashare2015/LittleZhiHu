@@ -8,12 +8,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/card_margin"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     android:stateListAnimator="@drawable/touch_raise"
-    app:cardBackgroundColor="@android:color/darker_gray"
-    app:cardCornerRadius="@dimen/card_corner_radius">
+    app:cardBackgroundColor="@android:color/darker_gray">
 
     <!-- z轴: cardElevation -->
     <!-- 涟漪效果: clickable + foreground 属性-->

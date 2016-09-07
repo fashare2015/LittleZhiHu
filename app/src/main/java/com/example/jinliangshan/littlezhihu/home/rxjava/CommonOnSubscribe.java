@@ -1,7 +1,5 @@
 package com.example.jinliangshan.littlezhihu.home.rxjava;
 
-import com.example.jinliangshan.littlezhihu.home.network.loaddata.OnLoadData;
-
 import rx.Observable;
 import rx.Subscriber;
 
@@ -12,12 +10,12 @@ import rx.Subscriber;
  * <br/><br/>
  */
 public class CommonOnSubscribe<T> implements Observable.OnSubscribe<T> {
-    private OnLoadData<T> mOnLoadData;
+    private ObservableUtil.OnLoadData<T> mOnLoadData;
 
     private CommonOnSubscribe() {
     }
 
-    public CommonOnSubscribe(OnLoadData<T> mOnLoadData) {
+    public CommonOnSubscribe(ObservableUtil.OnLoadData<T> mOnLoadData) {
         this.mOnLoadData = mOnLoadData;
     }
 

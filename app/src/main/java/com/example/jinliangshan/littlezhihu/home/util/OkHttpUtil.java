@@ -1,4 +1,4 @@
-package com.example.jinliangshan.littlezhihu.home.network;
+package com.example.jinliangshan.littlezhihu.home.util;
 
 import android.util.Log;
 
@@ -12,25 +12,10 @@ import okhttp3.Request;
  */
 public class OkHttpUtil {
     public static final String TAG = "OkHttpUtil";
-    private static OkHttpUtil mInstance;
 
-    private OkHttpClient mOkHttpClient = new OkHttpClient();
+    private static OkHttpClient mOkHttpClient = new OkHttpClient();
 
-    private OkHttpUtil(){
-        mOkHttpClient = new OkHttpClient();
-    }
-
-    public static OkHttpUtil getInstance(){
-        if(mInstance == null){
-            synchronized (OkHttpUtil.class){
-                if(mInstance == null)
-                    mInstance = new OkHttpUtil();
-            }
-        }
-        return mInstance;
-    }
-
-    public String get(String url){
+    public static String get(String url){
         Request request = new Request.Builder().url(url).build();
 
         String responseStr = null;

@@ -1,11 +1,11 @@
-package com.example.jinliangshan.littlezhihu.home.rxjava.observable;
+package com.example.jinliangshan.littlezhihu.home.rxjava;
 
 
 import com.annimon.stream.Stream;
-import com.example.jinliangshan.littlezhihu.home.model.Article;
+import com.example.jinliangshan.littlezhihu.home.model.ArticleDetail;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
-import com.example.jinliangshan.littlezhihu.home.network.OkHttpUtil;
-import com.example.jinliangshan.littlezhihu.home.network.api.Apis;
+import com.example.jinliangshan.littlezhihu.home.util.OkHttpUtil;
+import com.example.jinliangshan.littlezhihu.home.api.Apis;
 import com.google.gson.Gson;
 
 import rx.Observable;
@@ -25,14 +25,14 @@ public class Observables {
         );
     }
 
-    public static Observable<Article> getArticleObservable(int articleId){
+    public static Observable<ArticleDetail> getArticleObservable(int articleId){
         return ObservableUtil.newInstance(() ->
-                loadDataFrom(Apis.URL_NEWS + articleId, Article.class)
+                loadDataFrom(Apis.URL_NEWS + articleId, ArticleDetail.class)
         );
     }
 
     private static <T> T loadDataFrom(String url, Class<T> targetClass){
-        return Stream.of(OkHttpUtil.getInstance().get(url))
+        return Stream.of(OkHttpUtil.get(url))
                 .map(responseString -> new Gson().fromJson(responseString, targetClass))
                 .findFirst().orElse(null);
     }

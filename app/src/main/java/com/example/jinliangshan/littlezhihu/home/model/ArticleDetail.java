@@ -8,7 +8,7 @@ import java.util.List;
  * Time: 00:20
  * <br/><br/>
  */
-public class Article {
+public class ArticleDetail {
 
     /**
      * body : <div></div>

@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragmentActivity;
-import com.example.jinliangshan.littlezhihu.home.model.Article;
+import com.example.jinliangshan.littlezhihu.home.model.ArticleDetail;
 import com.example.jinliangshan.littlezhihu.home.util.FragmentManagerUtil;
 import com.example.jinliangshan.littlezhihu.home.util.TransitionUtils;
 
@@ -61,8 +61,8 @@ public class ArticleActivity extends BaseFragmentActivity {
 
     @Override
     public void loadingFromFragment(Observable<?> dataObservable) {
-        dataObservable.cast(Article.class)
-                .map(Article:: getImage)
+        dataObservable.cast(ArticleDetail.class)
+                .map(ArticleDetail:: getImage)
                 .subscribe(this:: notifyBannerUpdate);
     }
 

@@ -22,9 +22,9 @@ public class ImageLoaderUtil {
     private ImageLoaderUtil(){}
 
     public static DisplayImageOptions cachedOptions = new DisplayImageOptions.Builder()
-            .showImageForEmptyUri(R.mipmap.ic_launcher)
-            .showImageOnFail(R.mipmap.ic_launcher)
-            .showImageOnLoading(R.mipmap.ic_launcher)
+            .showImageForEmptyUri(R.drawable.img_default)
+            .showImageOnFail(R.drawable.img_default)
+            .showImageOnLoading(R.drawable.img_default)
             //是否设置在加载之前重置view
             .resetViewBeforeLoading(false)
             .delayBeforeLoading(1000)

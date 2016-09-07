@@ -1,11 +1,11 @@
-package com.example.jinliangshan.littlezhihu.home.base;
+package com.example.jinliangshan.littlezhihu.home.widget;
 
 import android.support.v7.widget.RecyclerView;
 
 /**
  * Created by jinliangshan on 16/8/25.
  */
-public class BaseOnScrollListener extends RecyclerView.OnScrollListener {
+public class CommonRecyclerViewOnScrollListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         if (dy > 0) {   // dy > 0 -> scroll distance increase -> Scroll Up

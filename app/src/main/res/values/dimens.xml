@@ -10,9 +10,9 @@
     <dimen name="appbar_elevation">4dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="card_corner_radius">4dp</dimen>
-    <dimen name="card_elevation">2dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="card_padding">12dp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_margin">6dp</dimen>
+    <dimen name="card_padding">10dp</dimen>
 
     <dimen name="item_article_iv_width">90dp</dimen>
     <dimen name="item_article_iv_height">70dp</dimen>
