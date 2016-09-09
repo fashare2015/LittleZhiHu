@@ -59,9 +59,16 @@ public abstract class TimerPagerAdapter<T> extends BasePagerAdapter<T> implement
     }
 
     @Override
+    public void clearReferences() {
+        super.clearReferences();
+        clearTimer();
+        mOnTimerSchedule = null;
+    }
+
+    @Override
     public void start() {
         Log.i(TAG, "start");
-        shutdownTimer();
+        clearTimer();
         mTimer = Executors.newSingleThreadScheduledExecutor();
 
         mTimer.scheduleAtFixedRate(() -> {
@@ -75,7 +82,7 @@ public abstract class TimerPagerAdapter<T> extends BasePagerAdapter<T> implement
                 case PAUSE:
                     break;
                 case DESTROY:
-                    shutdownTimer();
+                    clearTimer();
                     break;
             }
         }, 1000 * 2, 1000 * 2, TimeUnit.MILLISECONDS);
@@ -83,16 +90,16 @@ public abstract class TimerPagerAdapter<T> extends BasePagerAdapter<T> implement
 
     @Override
     public void pause() {
-        shutdownTimer();
+        clearTimer();
     }
 
     @Override
     public void stop(){
         Log.i(TAG, "stop");
-        shutdownTimer();
+        clearTimer();
     }
 
-    private void shutdownTimer() {
+    private void clearTimer() {
         if (mTimer != null && !mTimer.isShutdown()) {
             mTimer.shutdown();
         }

@@ -39,7 +39,7 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
     public void initView() {
 //        StickyRecyclerHeadersDecoration itemDecoration;
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
-        mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext));
+        mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext, mRvArticleList));
 //        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
 
         mArticleAdapter.setOnItemClickListener(this);
@@ -78,6 +78,12 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mArticleAdapter.clearReferences();
+    }
+
+    @Override
     public void onItemClick(View itemView, ArticlePreview data, int position) {
         ArticleActivity.startThis(getActivity(), data.getId(), itemView);
     }
@@ -104,7 +110,7 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
         }
 
         // 优化图片加载
-        private ImageLoader mImageLoader = MyApplication.getInstance().getImageLoader();
+        private ImageLoader mImageLoader = MyApplication.getImageLoader();
 
         @Override
         protected void onDragging() {

@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.jinliangshan.littlezhihu.home.MyApplication;
+
 import butterknife.ButterKnife;
 import rx.Observable;
 
@@ -53,6 +55,12 @@ public abstract class BaseFragment extends Fragment implements OnLifeCycle{
     public void onDetach() {
         super.onDetach();
         mOnLoadDataListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MyApplication.getRefWatcher().watch(this);  // 监测内存泄漏
     }
 
     protected void dispatch(Observable<?> dataObservable){

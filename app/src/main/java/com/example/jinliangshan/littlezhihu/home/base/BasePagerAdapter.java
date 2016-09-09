@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +19,20 @@ import butterknife.ButterKnife;
  * Time: 17:04
  * <br/><br/>
  */
-public abstract class BasePagerAdapter<T> extends PagerAdapter {
+public abstract class BasePagerAdapter<T> extends PagerAdapter implements ReferencesManager{
     private static final int MAX_PAGE_SIZE = 10;
-    protected Context mContext;
+//    protected Context mContext;
+    private WeakReference<Context> mContextWeakReference;
     private List<T> mDataList;
     private List<View> mViewList;
     private OnItemClickListener<T> mOnItemClickListener;
 
     protected View mItemView;
+
+    protected Context getContext(){
+//        return mContext;
+        return mContextWeakReference.get();
+    }
 
     public List<T> getDataList() {
         return mDataList;
@@ -41,17 +48,19 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
     }
 
     public BasePagerAdapter(Context context) {
-        mContext = context;
+        mContextWeakReference = new WeakReference<>(context);
         mDataList = new ArrayList<>();
         initViewList(MAX_PAGE_SIZE);
     }
 
     private void initViewList(int size) {
+        if(getContext() == null)
+            return ;
         if(mViewList == null)
             mViewList = new ArrayList<>();
         mViewList.clear();
         for(int i=0; i<size; i++)
-            mViewList.add(LayoutInflater.from(mContext).inflate(getLayoutRes(), null));
+            mViewList.add(LayoutInflater.from(getContext()).inflate(getLayoutRes(), null));
     }
 
     @Override
@@ -91,4 +100,13 @@ public abstract class BasePagerAdapter<T> extends PagerAdapter {
         return key == view;
     }
 
+    @Override
+    public void clearReferences() {
+//        mContext = null;
+        mContextWeakReference = null;
+        mDataList = null;
+        mViewList = null;
+        mOnItemClickListener = null;
+        mItemView = null;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,7 @@ public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerVi
         implements HeaderAdapter<BaseHeaderRecyclerViewAdapter.BaseHeaderViewHolder<H>>{
 
     private static final String TAG = "BaseHeaderAdapter";
-    public static final int TYPE_HEADER = 0;
-    public static final int TYPE_NORMAL = 1;
+    protected static final int TYPE_HEADER = 1;
 
     public static final int POS_HEADER = 0;
 
@@ -37,13 +37,22 @@ public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerVi
         mOnHeaderClickListener = onHeaderClickListener;
     }
 
-    public BaseHeaderRecyclerViewAdapter(Context context) {
-        super(context);
+    public BaseHeaderRecyclerViewAdapter(Context context, RecyclerView recyclerView) {
+        super(context, recyclerView);
+    }
+
+    @Override
+    public void clearReferences() {
+        clearHoldersRefByType(TYPE_HEADER); // 在 super.mRecyclerView 释放前调用
+
+        super.clearReferences();
+        mHeaderData = null;
+        mOnHeaderClickListener = null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position==POS_HEADER? TYPE_HEADER: TYPE_NORMAL;
+        return position==POS_HEADER? TYPE_HEADER: super.getItemViewType(position);
     }
 
     @Override
@@ -83,9 +92,6 @@ public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerVi
         public BaseHeaderViewHolder(View itemView) {
             super(itemView);
         }
-
-        @Override
-        public void onRecycled() {}
     }
 
     public interface OnHeaderClickListener{

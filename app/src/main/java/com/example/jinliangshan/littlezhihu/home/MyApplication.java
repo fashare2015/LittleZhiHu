@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.example.jinliangshan.littlezhihu.home.imageloader.ImageLoaderUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * User: fashare(153614131@qq.com)
@@ -13,28 +15,39 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 需要在 manifest 里配置 application name
  */
 public class MyApplication extends Application {
-    private static MyApplication sApplication;
+    private static MyApplication instance;
 
     private ImageLoader mImageLoader;
 
-    public ImageLoader getImageLoader() {
-        return mImageLoader;
+    private RefWatcher mRefWatcher;
+
+    public static RefWatcher getRefWatcher() {
+        return instance.mRefWatcher;
+    }
+
+    public static ImageLoader getImageLoader() {
+        return instance.mImageLoader;
     }
 
     public static MyApplication getInstance() {
-        return sApplication;
+        return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sApplication = MyApplication.this;
+        instance = MyApplication.this;
         initImageLoader();
+        initLeakCanary();
     }
 
     private void initImageLoader() {
         // Create global configuration and initialize ImageLoader with this config
         mImageLoader = ImageLoader.getInstance();
         mImageLoader.init(ImageLoaderUtil.getSimpleConfig(this));
+    }
+
+    private void initLeakCanary() {
+        mRefWatcher = LeakCanary.install(this);
     }
 }

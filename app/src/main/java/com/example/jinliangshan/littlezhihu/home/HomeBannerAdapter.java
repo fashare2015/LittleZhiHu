@@ -45,6 +45,17 @@ public class HomeBannerAdapter extends TimerPagerAdapter<TopArticle> {
     }
 
     @Override
+    public void clearReferences() {
+        super.clearReferences();
+        mBitmapCache.clear();
+        mBitmapCache = null;
+        mIvImage = null;
+        mCvBannerItem = null;
+        mDefaultBitmap = null;
+        bitmap = null;
+    }
+
+    @Override
     protected int getLayoutRes() {
         return R.layout.item_banner;
     }
@@ -65,7 +76,7 @@ public class HomeBannerAdapter extends TimerPagerAdapter<TopArticle> {
                 mIvImage.setImageBitmap(bitmap);
             } else {
                 Log.i(TAG, "get bitmap " + pos + " from network");
-                MyApplication.getInstance().getImageLoader()
+                MyApplication.getImageLoader()
                         .displayImage(topArticle.getImage(), mIvImage, new SimpleImageLoadingListener() {
                             @Override
                             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {

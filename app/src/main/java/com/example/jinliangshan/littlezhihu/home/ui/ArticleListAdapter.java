@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,13 +38,23 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
     private BitmapCache mBitmapCache = new BitmapCache();
     // 一个 adapter 持有一个 cache, 为 viewHolder 所共有
 
-    public ArticleListAdapter(Context context) {
-        super(context);
+    public ArticleListAdapter(Context context, RecyclerView recyclerView) {
+        super(context, recyclerView);
     }
 
     @Override
-    public BaseViewHolder<ArticlePreview> getViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_article, parent, false);
+    public void clearReferences() {
+        super.clearReferences();
+        mBitmapCache.clear();
+        mBitmapCache = null;
+    }
+
+    @Override
+    public BaseViewHolder<ArticlePreview> newViewHolder(ViewGroup parent, int viewType) {
+        if(getContext() == null)
+            return null;
+        View itemView = LayoutInflater.from(getContext())
+                .inflate(R.layout.item_article, parent, false);
         return new ArticleViewHolder(itemView);
     }
 
@@ -84,7 +95,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
                     mIvImage.setImageBitmap(bitmap);
                 } else {
                     Log.i(TAG, "get bitmap " + pos + " from network");
-                    MyApplication.getInstance().getImageLoader()
+                    MyApplication.getImageLoader()
                             .loadImage(url, new SimpleImageLoadingListener() {
                                 @Override
                                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
@@ -101,12 +112,25 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
         public void onRecycled() {
             mIvImage.setImageDrawable(null);    // 复用时清空图片
         }
+
+        @Override
+        public void clearReferences() {
+            super.clearReferences();
+            mCvArticle = null;
+            mIvImage = null;
+            mTvTitle = null;
+            mDefaultBitmap = null;
+            bitmap = null;
+        }
     }
 
     // --- header ---
     @Override
     public BaseHeaderViewHolder<List<TopArticle>> onCreateHeaderViewHolder(ViewGroup parent) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.header_home_banner, parent, false);
+        if(getContext() == null)
+            return null;
+        View itemView = LayoutInflater.from(getContext())
+                .inflate(R.layout.header_home_banner, parent, false);
         return new ArticleHeaderViewHolder(itemView);
     }
 
@@ -132,7 +156,9 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
         }
 
         public void initView() {
-            mHomeBannerAdapter = new HomeBannerAdapter(mContext);
+            if(getContext() == null)
+                return ;
+            mHomeBannerAdapter = new HomeBannerAdapter(getContext());
             mVpBanner.setAdapter(mHomeBannerAdapter);
             mVpBanner.setOnTouchListener((view, event) -> { // 重写 onTouch: 触摸时暂停轮播
                 switch (event.getAction()) {
@@ -172,8 +198,27 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
         }
 
         @Override
+        public void onRecycled() {
+            super.onRecycled();
+            mHomeBannerAdapter.stop();  // header 回收时, 停止 banner 轮播
+        }
+
+        @Override
+        public void clearReferences() {
+            super.clearReferences();
+            mVpBanner = null;
+            mHomeBannerAdapter.clearReferences();
+            mHomeBannerAdapter = null;
+
+            mDefaultBitmap = null;
+            mDefaultBannerDatas = null;
+        }
+
+        @Override
         public void onItemClick(View itemView, TopArticle data, int position) {
-            ArticleActivity.startThis((Activity) mContext, data.getId(), itemView);
+            if(getContext() == null)
+                return ;
+            ArticleActivity.startThis((Activity) getContext(), data.getId(), itemView);
         }
 
         /**

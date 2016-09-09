@@ -2,9 +2,11 @@ package com.example.jinliangshan.littlezhihu.home.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +15,21 @@ import butterknife.ButterKnife;
 /**
  * Created by jinliangshan on 16/8/25.
  */
-public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>{
+public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>
+        implements ReferencesManager{
     private static final String TAG = "BaseRecyclerViewAdapter";
-    protected Context mContext;
+    protected static final int TYPE_NORMAL = 0;
+
+//    protected Context mContext;
+    private WeakReference<Context> mContextWeakReference;
+    protected RecyclerView mRecyclerView;
     protected List<T> mDataList;
     private OnItemClickListener<T> mOnItemClickListener;
+
+    protected Context getContext(){
+//        return mContext;
+        return mContextWeakReference.get();
+    }
 
     public List<T> getDataList() {
         return mDataList;
@@ -32,17 +44,42 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         mOnItemClickListener = onItemClickListener;
     }
 
-    public BaseRecyclerViewAdapter(Context context) {
-        mContext = context;
+    public BaseRecyclerViewAdapter(Context context, RecyclerView recyclerView) {
+//        mContext = context;
+        mContextWeakReference = new WeakReference<>(context);
+        mRecyclerView = recyclerView;
         mDataList = new ArrayList<>();
     }
 
     @Override
-    public BaseViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return getViewHolder(parent, viewType);
+    public void clearReferences() {
+        Log.i(this.getClass().getSimpleName(), "clearReferences");
+        clearHoldersRefByType(TYPE_NORMAL);
+
+        mContextWeakReference = null;
+        mRecyclerView = null;
+        mDataList = null;
+        mOnItemClickListener = null;
     }
 
-    protected abstract BaseViewHolder<T> getViewHolder(ViewGroup parent, int viewType);
+    protected void clearHoldersRefByType(int viewType){
+        BaseViewHolder<T> baseViewHolder = null;
+        while ((baseViewHolder = (BaseViewHolder<T>) mRecyclerView.getRecycledViewPool().getRecycledView(viewType)) != null){
+            baseViewHolder.clearReferences();
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return TYPE_NORMAL;
+    }
+
+    @Override
+    public BaseViewHolder<T> onCreateViewHolder(ViewGroup parent, int viewType) {
+        return newViewHolder(parent, viewType);
+    }
+
+    protected abstract BaseViewHolder<T> newViewHolder(ViewGroup parent, int viewType);
 
     @Override
     public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
@@ -64,7 +101,7 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         return mDataList == null? 0: mDataList.size();
     }
 
-    public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder{
+    public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder implements ReferencesManager{
 
         public BaseViewHolder(View itemView) {
             super(itemView);
@@ -73,7 +110,14 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
         public abstract void onBind(T data, int pos);
 
-        public abstract void onRecycled();
+        public void onRecycled(){
+//            this.clearReferences(); // 清除 holder 的引用
+        }
+
+        @Override
+        public void clearReferences() {
+            Log.i(this.getClass().getSimpleName(), "clearReferences");
+        }
     }
 
 }

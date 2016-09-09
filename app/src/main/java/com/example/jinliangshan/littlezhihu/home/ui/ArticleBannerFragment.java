@@ -30,7 +30,7 @@ public class ArticleBannerFragment extends BaseFragment {
     }
 
     public void upDateBanner(String imgUrl) {
-        MyApplication.getInstance().getImageLoader()
+        MyApplication.getImageLoader()
                 .displayImage(imgUrl, mIvBanner);
     }
 }
