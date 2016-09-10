@@ -11,7 +11,7 @@ import okhttp3.Request;
  * Created by jinliangshan on 16/8/26.
  */
 public class OkHttpUtil {
-    public static final String TAG = "OkHttpUtil";
+    protected static final String TAG = OkHttpUtil.class.getSimpleName();
 
     private static OkHttpClient mOkHttpClient = new OkHttpClient();
 

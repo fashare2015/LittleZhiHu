@@ -22,8 +22,6 @@ import rx.Observable;
  * Created by jinliangshan on 16/8/26.
  */
 public class ArticleFragment extends BaseFragment {
-    private static final String TAG = "ArticleFragment";
-
     public static final String CSS_URL = "file:///android_asset/" + "style.css";
     public static final String USE_CSS_LINK = String.format("<link rel=\"stylesheet\"" +
             " type=\"text/css\" href=\"%s\" />", CSS_URL);

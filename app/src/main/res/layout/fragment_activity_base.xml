@@ -14,7 +14,6 @@
     <!-- 为了响应 layout_behavior:
         NestedScrollView 代替 ScrollView
         rootview 用 CoordinatorLayout 代替 LinearLayout-->
-    <!--<com.example.jinliangshan.littlezhihu.home.widget.CommonNestedScrollView-->
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

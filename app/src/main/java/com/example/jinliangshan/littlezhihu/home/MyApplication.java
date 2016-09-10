@@ -15,6 +15,7 @@ import com.squareup.leakcanary.RefWatcher;
  * 需要在 manifest 里配置 application name
  */
 public class MyApplication extends Application {
+    protected static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication instance;
 
     private ImageLoader mImageLoader;

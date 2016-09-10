@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.jinliangshan.littlezhihu.R;
+import com.example.jinliangshan.littlezhihu.home.base.BasePagerAdapter;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
 import com.example.jinliangshan.littlezhihu.home.model.TopArticle;
-import com.example.jinliangshan.littlezhihu.home.widget.TimerPagerAdapter;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import butterknife.BindBitmap;
@@ -22,8 +22,7 @@ import butterknife.BindView;
  * Time: 19:15
  * <br/><br/>
  */
-public class HomeBannerAdapter extends TimerPagerAdapter<TopArticle> {
-    private static final String TAG = "HomeBannerAdapter";
+public class HomeBannerAdapter extends BasePagerAdapter<TopArticle> {
     private BitmapCache mBitmapCache = new BitmapCache();
 
     @BindView(R.id.iv_image)

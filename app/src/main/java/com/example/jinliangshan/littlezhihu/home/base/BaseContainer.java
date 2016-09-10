@@ -16,6 +16,8 @@ import butterknife.ButterKnife;
  * a container to hold a ViewGroup
  */
 public abstract class BaseContainer<T> extends CoordinatorLayout implements OnLifeCycle{
+    protected final String TAG = this.getClass().getSimpleName();
+
     protected Context mContext;
     protected View mItemView;
     protected T data;

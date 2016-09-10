@@ -17,11 +17,11 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.BaseViewHolder<T>>
         implements ReferencesManager{
-    private static final String TAG = "BaseRecyclerViewAdapter";
+    protected final String TAG = this.getClass().getSimpleName();
     protected static final int TYPE_NORMAL = 0;
 
 //    protected Context mContext;
-    private WeakReference<Context> mContextWeakReference;
+    private WeakReference<Context> mContextWeakReference;   // 弱引用
     protected RecyclerView mRecyclerView;
     protected List<T> mDataList;
     private OnItemClickListener<T> mOnItemClickListener;
@@ -53,20 +53,18 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
 
     @Override
     public void clearReferences() {
-        Log.i(this.getClass().getSimpleName(), "clearReferences");
-        clearHoldersRefByType(TYPE_NORMAL);
-
+        Log.i(TAG, "clearReferences");
+        clearAllViewHolder();
         mContextWeakReference = null;
         mRecyclerView = null;
         mDataList = null;
         mOnItemClickListener = null;
     }
 
-    protected void clearHoldersRefByType(int viewType){
-        BaseViewHolder<T> baseViewHolder = null;
-        while ((baseViewHolder = (BaseViewHolder<T>) mRecyclerView.getRecycledViewPool().getRecycledView(viewType)) != null){
-            baseViewHolder.clearReferences();
-        }
+    protected void clearAllViewHolder(){
+        for(int i=0; i<getItemCount(); i++)
+            if(getViewHolder(i) != null)
+                getViewHolder(i).clearReferences();
     }
 
     @Override
@@ -80,6 +78,15 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     }
 
     protected abstract BaseViewHolder<T> newViewHolder(ViewGroup parent, int viewType);
+
+    /**
+     * ViewHolder 是复用的, 有些 position 可能返回 null
+     * @param position
+     * @return
+     */
+    protected BaseViewHolder<T> getViewHolder(int position){
+        return (BaseViewHolder<T>) mRecyclerView.findViewHolderForAdapterPosition(position);
+    }
 
     @Override
     public void onBindViewHolder(BaseViewHolder<T> holder, int position) {
@@ -97,11 +104,18 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
     }
 
     @Override
+    public void onViewDetachedFromWindow(BaseViewHolder<T> holder) {
+        super.onViewDetachedFromWindow(holder);
+//        Log.d(TAG, "onViewDetachedFromWindow " + holder.getAdapterPosition() + ": " + holder);
+    }
+
+    @Override
     public int getItemCount() {
         return mDataList == null? 0: mDataList.size();
     }
 
     public abstract static class BaseViewHolder<T> extends RecyclerView.ViewHolder implements ReferencesManager{
+        protected final String TAG = this.getClass().getSimpleName();
 
         public BaseViewHolder(View itemView) {
             super(itemView);
@@ -111,12 +125,12 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         public abstract void onBind(T data, int pos);
 
         public void onRecycled(){
-//            this.clearReferences(); // 清除 holder 的引用
+            Log.d(TAG + getAdapterPosition(), "onRecycled");
         }
 
         @Override
         public void clearReferences() {
-            Log.i(this.getClass().getSimpleName(), "clearReferences");
+            Log.d(TAG + this, "clearReferences");
         }
     }
 

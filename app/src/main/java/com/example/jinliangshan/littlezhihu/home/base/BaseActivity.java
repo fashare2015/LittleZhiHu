@@ -8,6 +8,7 @@ import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity implements OnLifeCycle{
+    protected final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

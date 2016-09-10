@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerViewAdapter<T>
         implements HeaderAdapter<BaseHeaderRecyclerViewAdapter.BaseHeaderViewHolder<H>>{
 
-    private static final String TAG = "BaseHeaderAdapter";
     protected static final int TYPE_HEADER = 1;
 
     public static final int POS_HEADER = 0;
@@ -43,8 +42,6 @@ public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerVi
 
     @Override
     public void clearReferences() {
-        clearHoldersRefByType(TYPE_HEADER); // 在 super.mRecyclerView 释放前调用
-
         super.clearReferences();
         mHeaderData = null;
         mOnHeaderClickListener = null;
@@ -68,7 +65,11 @@ public abstract class BaseHeaderRecyclerViewAdapter<H, T> extends BaseRecyclerVi
             if(holder instanceof BaseHeaderViewHolder)
                 onBindHeaderViewHolder((BaseHeaderViewHolder<H>)holder);
         }else   // pos>0 -> pos-1
-            super.onBindViewHolder(holder, position-1);
+            super.onBindViewHolder(holder, getNonHeaderPosition(position));
+    }
+
+    protected int getNonHeaderPosition(int pos){
+        return pos>0? pos-1: -1;
     }
 
     @Override

@@ -2,18 +2,17 @@ package com.example.jinliangshan.littlezhihu.home.ui;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.jinliangshan.littlezhihu.R;
 import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import com.example.jinliangshan.littlezhihu.home.base.BaseFragment;
-import com.example.jinliangshan.littlezhihu.home.widget.CommonRecyclerViewOnScrollListener;
 import com.example.jinliangshan.littlezhihu.home.base.OnItemClickListener;
 import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
 import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
+import com.example.jinliangshan.littlezhihu.home.widget.CommonRecyclerViewOnScrollListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.BindView;
@@ -67,20 +66,17 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
     @Override
     public void onResume() {
         super.onResume();
-        // TODO bannerTimer
-//        mArticleAdapter.start();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-//        mArticleAdapter.stop();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mArticleAdapter.clearReferences();
+        super.onDestroy();
     }
 
     @Override
@@ -98,7 +94,7 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
         // 隐藏 toolBar
         @Override
         public void onScrolledUp(int dy) {
-            Log.i("ArticleListFragment", "onScrolledUp");
+//            Log.i("ArticleListFragment", "onScrolledUp");
             if(mOnArticleListScrollListener != null)
                 mOnArticleListScrollListener.onScrolledUp();
         }

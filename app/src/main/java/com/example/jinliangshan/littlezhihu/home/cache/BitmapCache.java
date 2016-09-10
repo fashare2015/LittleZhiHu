@@ -14,6 +14,8 @@ import java.util.Map;
  * <br/><br/>
  */
 public class BitmapCache {
+    protected final String TAG = this.getClass().getSimpleName();
+
     private Map<String, SoftReference<Bitmap>> cache = Collections
             .synchronizedMap(new HashMap<>());
 

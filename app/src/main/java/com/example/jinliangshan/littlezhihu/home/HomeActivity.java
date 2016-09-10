@@ -1,5 +1,6 @@
 package com.example.jinliangshan.littlezhihu.home;
 
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 
 import com.example.jinliangshan.littlezhihu.R;
@@ -14,7 +15,6 @@ import butterknife.BindView;
 import rx.Observable;
 
 public class HomeActivity extends BaseFragmentActivity implements ArticleListFragment.OnArticleListScrollListener{
-    private static final String TAG = "HomeActivity";
     private ArticleListFragment mArticleListFragment;
 
     @BindView(R.id.fab_menu)
@@ -38,6 +38,15 @@ public class HomeActivity extends BaseFragmentActivity implements ArticleListFra
     @Override
     public void initView() {
         initAnim();
+        simpleLeak();
+    }
+
+    /**
+     * 内存泄漏的示例
+     * 10s内, HomeActivity 将被 handler 引用着
+     */
+    private void simpleLeak() {
+        new Handler().postDelayed(() -> {}, 10000);
     }
 
     private void initAnim() {

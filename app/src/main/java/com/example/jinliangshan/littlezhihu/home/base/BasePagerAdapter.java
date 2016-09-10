@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
  * <br/><br/>
  */
 public abstract class BasePagerAdapter<T> extends PagerAdapter implements ReferencesManager{
+    protected final String TAG = this.getClass().getSimpleName();
     private static final int MAX_PAGE_SIZE = 10;
 //    protected Context mContext;
     private WeakReference<Context> mContextWeakReference;

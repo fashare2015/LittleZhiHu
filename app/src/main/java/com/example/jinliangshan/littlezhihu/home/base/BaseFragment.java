@@ -15,7 +15,7 @@ import butterknife.ButterKnife;
 import rx.Observable;
 
 public abstract class BaseFragment extends Fragment implements OnLifeCycle{
-    private static final String TAG = "BaseFragment";
+    protected final String TAG = this.getClass().getSimpleName();
     protected Context mContext;
     protected OnLoadDataListener mOnLoadDataListener;
 

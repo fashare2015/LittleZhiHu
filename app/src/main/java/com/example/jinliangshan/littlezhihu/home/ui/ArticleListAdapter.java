@@ -3,12 +3,10 @@ package com.example.jinliangshan.littlezhihu.home.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +20,7 @@ import com.example.jinliangshan.littlezhihu.home.base.OnItemClickListener;
 import com.example.jinliangshan.littlezhihu.home.cache.BitmapCache;
 import com.example.jinliangshan.littlezhihu.home.model.ArticlePreview;
 import com.example.jinliangshan.littlezhihu.home.model.TopArticle;
+import com.example.jinliangshan.littlezhihu.home.widget.TimerViewPager;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.Arrays;
@@ -59,7 +58,6 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
     }
 
     public class ArticleViewHolder extends BaseViewHolder<ArticlePreview> {
-        private static final String TAG = "ArticleViewHolder";
         @BindView(R.id.cv_article)
         CardView mCvArticle;
 
@@ -111,6 +109,7 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
         @Override
         public void onRecycled() {
             mIvImage.setImageDrawable(null);    // 复用时清空图片
+            // TODO 复用时, 异步加载图片还是有错乱的 bug
         }
 
         @Override
@@ -136,10 +135,9 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
 
     public class ArticleHeaderViewHolder extends BaseHeaderViewHolder<List<TopArticle>>
             implements OnItemClickListener<TopArticle>{
-        private static final String TAG = "ArticleHeaderViewHolder";
         @BindView(R.id.vp_banner)
-        ViewPager mVpBanner;
-        public HomeBannerAdapter mHomeBannerAdapter;
+        TimerViewPager mVpBanner;
+        private HomeBannerAdapter mHomeBannerAdapter;
 
         @BindBitmap(R.mipmap.ic_launcher)
         Bitmap mDefaultBitmap;
@@ -160,36 +158,17 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
                 return ;
             mHomeBannerAdapter = new HomeBannerAdapter(getContext());
             mVpBanner.setAdapter(mHomeBannerAdapter);
-            mVpBanner.setOnTouchListener((view, event) -> { // 重写 onTouch: 触摸时暂停轮播
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // ACTION_DOWN 被 child 消费了, 不重写 onInterceptTouchEvent 的话
-                        // 是获取不到的.
-                    case MotionEvent.ACTION_MOVE:
-                        Log.i(TAG, "MOVE");
-                        mHomeBannerAdapter.setTouching(true);
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                    case MotionEvent.ACTION_UP:
-                        Log.i(TAG, "UP");
-                        mHomeBannerAdapter.setTouching(false);
-                        break;
-                }
-                return false;
-            });
-
-            mHomeBannerAdapter.setOnTimerSchedule(() -> {
-                if(mHomeBannerAdapter == null || mHomeBannerAdapter.getCount() == 0)
-                    return ;
-                mVpBanner.post(() -> {    // 图片轮播, post 到 MainThread
-                    int nextPageOffset = (mVpBanner.getCurrentItem()+1) % mHomeBannerAdapter.getCount();
-                    Log.i(TAG, "select: " + nextPageOffset);
-                    mVpBanner.setCurrentItem(nextPageOffset);
-                });
-            });
+            setBannerTimerCallback();
             mHomeBannerAdapter.setOnItemClickListener(this);
-
             upDateBanner(mDefaultBannerDatas);
+        }
+
+        private void setBannerTimerCallback() {
+            mVpBanner.setOnTimerSchedule(() -> {    // 图片轮播,
+                int nextPageOffset = (mVpBanner.getCurrentItem()+1) % mHomeBannerAdapter.getCount();
+                Log.i(TAG, "select: " + nextPageOffset);
+                mVpBanner.setCurrentItem(nextPageOffset);
+            });
         }
 
         @Override
@@ -200,7 +179,6 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
         @Override
         public void onRecycled() {
             super.onRecycled();
-            mHomeBannerAdapter.stop();  // header 回收时, 停止 banner 轮播
         }
 
         @Override
@@ -227,13 +205,13 @@ public class ArticleListAdapter extends BaseHeaderRecyclerViewAdapter<List<TopAr
          * @param topStories
          */
         public void upDateBanner(List<TopArticle> topStories){
-            mHomeBannerAdapter.stop();
+            mVpBanner.stop();
 
             mHomeBannerAdapter.setDataList(topStories);
             mVpBanner.setAdapter(mHomeBannerAdapter);
             mVpBanner.setCurrentItem(0);
 
-            mHomeBannerAdapter.start();
+            mVpBanner.start();
         }
     }
 }

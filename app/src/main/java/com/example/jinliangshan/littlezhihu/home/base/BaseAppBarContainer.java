@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
  * a container to hold a ViewGroup
  */
 public abstract class BaseAppBarContainer<T> extends AppBarLayout implements OnLifeCycle{
+    protected final String TAG = this.getClass().getSimpleName();
     protected Context mContext;
     protected View mItemView;
     protected T data;

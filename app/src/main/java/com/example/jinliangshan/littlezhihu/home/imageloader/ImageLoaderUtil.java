@@ -19,6 +19,8 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
  */
 
 public class ImageLoaderUtil {
+    protected final String TAG = this.getClass().getSimpleName();
+
     private ImageLoaderUtil(){}
 
     public static DisplayImageOptions cachedOptions = new DisplayImageOptions.Builder()

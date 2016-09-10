@@ -12,6 +12,8 @@ import android.view.View;
  * Created by jinliangshan on 16/8/25.
  */
 public class HidingAnimUtil implements HidingAnim {
+    protected final String TAG = this.getClass().getSimpleName();
+
     public static final int HIDING_MOD_TOP = 0;
     public static final int HIDING_MOD_BOTTOM = 1;
 
@@ -52,11 +54,10 @@ public class HidingAnimUtil implements HidingAnim {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startAnim(boolean toShow){
-//        Log.d("HidingAnimUtil", toShow? "show": "hide");
         if(mView == null || mAnimator.isRunning()
                 || mHidingMod == -1 || toShow == isShow)
             return ;
-        Log.d("HidingAnimUtil", toShow? "show": "hide");
+        Log.d(TAG, toShow? "show": "hide");
         mAnimator.play(ObjectAnimator.ofFloat(mView, mView.TRANSLATION_Y,
                 mView.getTranslationY(), getDy(toShow)));
         mAnimator.start();
