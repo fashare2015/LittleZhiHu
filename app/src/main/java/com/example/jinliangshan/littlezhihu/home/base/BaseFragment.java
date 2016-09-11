@@ -14,9 +14,10 @@ import com.example.jinliangshan.littlezhihu.home.MyApplication;
 import butterknife.ButterKnife;
 import rx.Observable;
 
-public abstract class BaseFragment extends Fragment implements OnLifeCycle{
+public abstract class BaseFragment extends Fragment implements OnLifeCycle, BaseActivity.OnWidgetClickListener{
     protected final String TAG = this.getClass().getSimpleName();
     protected Context mContext;
+    protected BaseFragmentActivity mActivity;
     protected OnLoadDataListener mOnLoadDataListener;
 
     public BaseFragment() {}
@@ -33,22 +34,40 @@ public abstract class BaseFragment extends Fragment implements OnLifeCycle{
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
         initView();
+        initListener();
         loadData();
     }
 
+    @Deprecated
     @Override
-    public void initBundle() {}
+    final public void initBundle() {}
+
+    @Override
+    public void initView() {}
+
+    @Override
+    public void initListener() {
+        if(mActivity != null)
+            mActivity.setOnWidgetClickListener(this);
+    }
+
+    @Override
+    public void loadData() {}
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        if (context instanceof OnLoadDataListener) {
+
+        if (context instanceof BaseFragmentActivity)
+            mActivity = (BaseFragmentActivity) context;
+        else
+            Log.i(TAG, context.toString() + " must extend BaseFragmentActivity");
+
+        if (context instanceof OnLoadDataListener)
             mOnLoadDataListener = (OnLoadDataListener) context;
-        } else {
-            Log.i(TAG, context.toString()
-                    + " must implement OnLoadDataListener");
-        }
+        else
+            Log.i(TAG, context.toString() + " must implement OnLoadDataListener");
     }
 
     @Override
@@ -61,6 +80,11 @@ public abstract class BaseFragment extends Fragment implements OnLifeCycle{
     public void onDestroy() {
         super.onDestroy();
         MyApplication.getRefWatcher().watch(this);  // 监测内存泄漏
+    }
+
+    @Override
+    public void clickToolBar() {
+        Log.d(TAG, "clickToolBar");
     }
 
     protected void dispatch(Observable<?> dataObservable){

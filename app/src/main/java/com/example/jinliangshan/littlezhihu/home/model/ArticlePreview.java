@@ -1,6 +1,6 @@
 package com.example.jinliangshan.littlezhihu.home.model;
 
-import com.google.gson.Gson;
+import com.example.jinliangshan.littlezhihu.home.base.BaseJavaBean;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  *
  *
  */
-public class ArticlePreview {
+public class ArticlePreview extends BaseJavaBean {
     /**
      * title : 中国古代家具发展到今天有两个高峰，一个两宋一个明末（多图）
      * ga_prefix : 052321
@@ -62,10 +62,5 @@ public class ArticlePreview {
 
     public void setImages(List<String> images) {
         this.images = images;
-    }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
     }
 }

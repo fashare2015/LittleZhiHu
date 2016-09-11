@@ -3,9 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!--CardView 点击吸附高度-->
     <dimen name="bottom_elevation">0dp</dimen>
     <dimen name="top_elevation">4dp</dimen>
-
 
     <dimen name="appbar_elevation">4dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
@@ -19,4 +19,9 @@
     <dimen name="item_article_tv_textsize">19sp</dimen>
     <dimen name="icvp_banner_height">160dp</dimen>
     <dimen name="banner_container_height">300dp</dimen>
+
+    <!--SwipeRefreshLayout 刷新进度的起始, 终止位置-->
+    <dimen name="srl_refresh_start">60dp</dimen>
+    <dimen name="srl_refresh_end">100dp</dimen>
+    
 </resources>

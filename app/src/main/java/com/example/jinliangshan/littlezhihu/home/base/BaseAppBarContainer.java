@@ -44,5 +44,11 @@ public abstract class BaseAppBarContainer<T> extends AppBarLayout implements OnL
     public void initBundle() {}
 
     @Override
+    public void initView() {}
+
+    @Override
+    public void initListener() {}
+
+    @Override
     public void loadData() {}
 }

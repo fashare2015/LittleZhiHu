@@ -1,5 +1,7 @@
 package com.example.jinliangshan.littlezhihu.home.rxjava;
 
+import android.util.Log;
+
 import rx.Observable;
 import rx.Subscriber;
 
@@ -10,7 +12,9 @@ import rx.Subscriber;
  * <br/><br/>
  */
 public class CommonOnSubscribe<T> implements Observable.OnSubscribe<T> {
+    protected final String TAG = this.getClass().getSimpleName();
     private ObservableUtil.OnLoadData<T> mOnLoadData;
+    private T mData = null;
 
     private CommonOnSubscribe() {
     }
@@ -21,13 +25,16 @@ public class CommonOnSubscribe<T> implements Observable.OnSubscribe<T> {
 
     @Override
     public void call(Subscriber<? super T> subscriber) {
-        T data = null;
-        if (mOnLoadData != null)
-            data = mOnLoadData.loadData();
-        if (data == null) {          // 获取失败
-            subscriber.onError(new Throwable("data 为空"));
-        } else                       // 获取成功
-            subscriber.onNext(data);
+        if (mData == null && mOnLoadData != null)   // mData 拉取过数据, 就不再拉取
+            mData = mOnLoadData.loadData();
+        if (mData == null) {          // 获取失败
+            Log.d(TAG, "onError: data is null");
+            subscriber.onError(new Throwable("获取数据异常"));
+        } else {                       // 获取成功
+            Log.d(TAG, "onNext: data => " + mData);
+            subscriber.onNext(mData);
+        }
+        Log.d(TAG, "onCompleted");
         subscriber.onCompleted();
     }
 }

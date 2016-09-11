@@ -1,6 +1,6 @@
 package com.example.jinliangshan.littlezhihu.home.model;
 
-import com.google.gson.Gson;
+import com.example.jinliangshan.littlezhihu.home.base.BaseJavaBean;
 
 /**
  * User: fashare(153614131@qq.com)
@@ -8,7 +8,7 @@ import com.google.gson.Gson;
  * Time: 20:01
  * <br/><br/>
  */
-public class TopArticle {
+public class TopArticle extends BaseJavaBean {
     /**
      * title : 商场和很多人家里，竹制家具越来越多（多图）
      * image : http://p2.zhimg.com/9a/15/9a1570bb9e5fa53ae9fb9269a56ee019.jpg
@@ -61,10 +61,5 @@ public class TopArticle {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
     }
 }

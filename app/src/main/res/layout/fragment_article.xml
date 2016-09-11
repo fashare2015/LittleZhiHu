@@ -2,10 +2,12 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nsv_article_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionName="@string/cv_article_transition">
+    android:transitionName="@string/cv_article_transition"
+    android:descendantFocusability="blocksDescendants">
 
     <WebView
         android:id="@+id/wv_article"

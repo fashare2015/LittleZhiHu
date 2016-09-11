@@ -1,13 +1,13 @@
 package com.example.jinliangshan.littlezhihu.home.model;
 
-import com.google.gson.Gson;
+import com.example.jinliangshan.littlezhihu.home.base.BaseJavaBean;
 
 import java.util.List;
 
 /**
  * Created by jinliangshan on 16/8/26.
  */
-public class LatestNews {
+public class LatestNews extends BaseJavaBean {
 
     /**
      * date : 20140523
@@ -42,10 +42,4 @@ public class LatestNews {
     public void setTop_stories(List<TopArticle> top_stories) {
         this.top_stories = top_stories;
     }
-
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
-    }
-
 }

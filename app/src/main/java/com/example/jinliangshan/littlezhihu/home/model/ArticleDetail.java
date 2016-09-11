@@ -1,5 +1,7 @@
 package com.example.jinliangshan.littlezhihu.home.model;
 
+import com.example.jinliangshan.littlezhihu.home.base.BaseJavaBean;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * Time: 00:20
  * <br/><br/>
  */
-public class ArticleDetail {
+public class ArticleDetail extends BaseJavaBean{
 
     /**
      * body : <div></div>

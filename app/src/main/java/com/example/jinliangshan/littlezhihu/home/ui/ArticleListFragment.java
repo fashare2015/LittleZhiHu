@@ -1,5 +1,6 @@
 package com.example.jinliangshan.littlezhihu.home.ui;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,9 +16,18 @@ import com.example.jinliangshan.littlezhihu.home.rxjava.Observables;
 import com.example.jinliangshan.littlezhihu.home.widget.CommonRecyclerViewOnScrollListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 
 public class ArticleListFragment extends BaseFragment implements OnItemClickListener<ArticlePreview> {
+    // SwipeRefreshLayout 刷新进度的起始, 终止位置
+    @BindDimen(R.dimen.srl_refresh_start)
+    int mDimenSrlRefreshStart;
+    @BindDimen(R.dimen.srl_refresh_end)
+    int mDimenSrlRefreshEnd;
+
+    @BindView(R.id.srl_refresh)
+    SwipeRefreshLayout mSrlRefresh;
 
     @BindView(R.id.rv_article_list)
     RecyclerView mRvArticleList;
@@ -36,15 +46,20 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
 
     @Override
     public void initView() {
-//        StickyRecyclerHeadersDecoration itemDecoration;
+        mSrlRefresh.setProgressViewOffset(false, mDimenSrlRefreshStart, mDimenSrlRefreshEnd);
+
         mRvArticleList.setLayoutManager(new LinearLayoutManager(mContext));
         mRvArticleList.setAdapter(mArticleAdapter = new ArticleListAdapter(mContext, mRvArticleList));
+//        StickyRecyclerHeadersDecoration itemDecoration;
 //        mRvArticleList.addItemDecoration(itemDecoration = new StickyRecyclerHeadersDecoration(mArticleAdapter));
+    }
 
+    @Override
+    public void initListener() {
+        super.initListener();
+        mSrlRefresh.setOnRefreshListener(this:: loadData);
         mArticleAdapter.setOnItemClickListener(this);
-//        mArticleAdapter.setOnHeaderClickListener((header, headerId) -> Toast.makeText(mContext, "adapter: headId = " + headerId, Toast.LENGTH_SHORT).show());
         mRvArticleList.addOnScrollListener(new MyOnScrollListener());
-
 //        StickyRecyclerHeadersTouchListener touchListener = new StickyRecyclerHeadersTouchListener(mRvArticleList, itemDecoration);
 //        touchListener.setOnHeaderClickListener((header, position, headerId) -> Toast.makeText(mContext, "headId = " + headerId, Toast.LENGTH_SHORT).show());
 //        mRvArticleList.addOnItemTouchListener(touchListener);
@@ -52,14 +67,17 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
 
     @Override
     public void loadData() {
+//        mSrlRefresh.setRefreshing(true);
         Observables.getLatestNewsObservable()
                 .doOnNext(articles -> mArticleAdapter.setHeaderData(articles.getTop_stories()))
-                .map(LatestNews:: getStories)
+                .map(LatestNews::getStories)
                 .subscribe(
                         // onNext, 请求成功
-                        mArticleAdapter:: setDataList,
+                        mArticleAdapter::setDataList,
                         // onError, 请求失败
-                        throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_LONG).show()
+                        throwable -> Toast.makeText(mContext, throwable.getMessage(), Toast.LENGTH_LONG).show(),
+                        // onComplete, 结束刷新
+                        () -> mSrlRefresh.setRefreshing(false)
                 );
     }
 
@@ -80,6 +98,12 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
     }
 
     @Override
+    public void clickToolBar() {
+        super.clickToolBar();
+        mRvArticleList.smoothScrollToPosition(0);
+    }
+
+    @Override
     public void onItemClick(View itemView, ArticlePreview data, int position) {
         ArticleActivity.startThis(getActivity(), data.getId(), itemView);
     }
@@ -95,13 +119,13 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
         @Override
         public void onScrolledUp(int dy) {
 //            Log.i("ArticleListFragment", "onScrolledUp");
-            if(mOnArticleListScrollListener != null)
+            if (mOnArticleListScrollListener != null)
                 mOnArticleListScrollListener.onScrolledUp();
         }
 
         @Override
         public void onScrolledDown(int dy) {
-            if(mOnArticleListScrollListener != null)
+            if (mOnArticleListScrollListener != null)
                 mOnArticleListScrollListener.onScrolledDown();
         }
 
@@ -119,7 +143,7 @@ public class ArticleListFragment extends BaseFragment implements OnItemClickList
         }
     }
 
-    public interface OnArticleListScrollListener{
+    public interface OnArticleListScrollListener {
         void onScrolledUp();
         void onScrolledDown();
     }

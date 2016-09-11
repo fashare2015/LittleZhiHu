@@ -2,8 +2,6 @@ package com.example.jinliangshan.littlezhihu.home.util;
 
 import android.util.Log;
 
-import java.io.IOException;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -18,13 +16,14 @@ public class OkHttpUtil {
     public static String get(String url){
         Request request = new Request.Builder().url(url).build();
 
-        String responseStr = null;
+        String responseStr;
         try {
             responseStr = mOkHttpClient.newCall(request).execute()
                     .body().string();
             Log.d(TAG, "get ===> " + responseStr);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         return responseStr;
     }

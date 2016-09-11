@@ -1,12 +1,16 @@
 package com.example.jinliangshan.littlezhihu.home.rxjava;
 
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import com.annimon.stream.Stream;
+import com.example.jinliangshan.littlezhihu.home.api.Apis;
 import com.example.jinliangshan.littlezhihu.home.model.ArticleDetail;
 import com.example.jinliangshan.littlezhihu.home.model.LatestNews;
+import com.example.jinliangshan.littlezhihu.home.util.GsonUtil;
+import com.example.jinliangshan.littlezhihu.home.util.ObjectUtil;
 import com.example.jinliangshan.littlezhihu.home.util.OkHttpUtil;
-import com.example.jinliangshan.littlezhihu.home.api.Apis;
-import com.google.gson.Gson;
 
 import rx.Observable;
 
@@ -31,9 +35,11 @@ public class Observables {
         );
     }
 
+    @TargetApi(Build.VERSION_CODES.N)
     private static <T> T loadDataFrom(String url, Class<T> targetClass){
         return Stream.of(OkHttpUtil.get(url))
-                .map(responseString -> new Gson().fromJson(responseString, targetClass))
+                .filter(ObjectUtil:: nonNull)
+                .map(responseString -> GsonUtil.fromJson(responseString, targetClass))
                 .findFirst().orElse(null);
     }
 }  

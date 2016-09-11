@@ -9,10 +9,7 @@ import com.example.jinliangshan.littlezhihu.home.ui.ArticleListFragment;
 import com.example.jinliangshan.littlezhihu.home.util.FragmentManagerUtil;
 import com.example.jinliangshan.littlezhihu.home.util.HidingAnimUtil;
 
-import java.util.List;
-
 import butterknife.BindView;
-import rx.Observable;
 
 public class HomeActivity extends BaseFragmentActivity implements ArticleListFragment.OnArticleListScrollListener{
     private ArticleListFragment mArticleListFragment;
@@ -66,17 +63,6 @@ public class HomeActivity extends BaseFragmentActivity implements ArticleListFra
     public void onScrolledDown() {
         mTbHidingAnimUtil.show();
         mFabHidingAnimUtil.show();
-    }
-
-    @Override
-    public void loadingFromFragment(Observable<?> dataObservable) {
-//        dataObservable.cast(LatestNews.class)
-//                .map(LatestNews::getTop_stories)
-//                .subscribe(this::notifyBannerUpdate);
-    }
-
-    private void notifyBannerUpdate(List topStories) {
-//        mHomeBannerFragment.upDateBanner(topStories);
     }
 }
 

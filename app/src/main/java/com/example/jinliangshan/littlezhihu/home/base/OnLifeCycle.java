@@ -12,5 +12,7 @@ public interface OnLifeCycle {
 
     void initView();
 
+    void initListener();
+
     void loadData();
 }
