@@ -20,8 +20,14 @@
     <dimen name="icvp_banner_height">160dp</dimen>
     <dimen name="banner_container_height">300dp</dimen>
 
+    <dimen name="item_comment_iv_width">50dp</dimen>
+    <dimen name="item_comment_iv_height">50dp</dimen>
+    <dimen name="item_comment_title_textsize">18sp</dimen>
+    <dimen name="item_comment_content_textsize">15sp</dimen>
+
+
     <!--SwipeRefreshLayout 刷新进度的起始, 终止位置-->
     <dimen name="srl_refresh_start">60dp</dimen>
     <dimen name="srl_refresh_end">100dp</dimen>
-    
+
 </resources>

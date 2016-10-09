@@ -21,7 +21,7 @@ import rx.Observable;
  * <br/><br/>
  */
 public class Observables {
-    private Observables(){}
+    protected Observables(){}
 
     public static Observable<LatestNews> getLatestNewsObservable(){
         return ObservableUtil.newInstance(() ->
@@ -36,7 +36,7 @@ public class Observables {
     }
 
     @TargetApi(Build.VERSION_CODES.N)
-    private static <T> T loadDataFrom(String url, Class<T> targetClass){
+    protected static <T> T loadDataFrom(String url, Class<T> targetClass){
         return Stream.of(OkHttpUtil.get(url))
                 .filter(ObjectUtil:: nonNull)
                 .map(responseString -> GsonUtil.fromJson(responseString, targetClass))

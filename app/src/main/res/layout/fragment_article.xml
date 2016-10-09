@@ -9,9 +9,23 @@
     android:transitionName="@string/cv_article_transition"
     android:descendantFocusability="blocksDescendants">
 
-    <WebView
-        android:id="@+id/wv_article"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/wv_article"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_lookup_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@color/colorPrimary"/>
+
+    </FrameLayout>
 
 </android.support.v4.widget.NestedScrollView>

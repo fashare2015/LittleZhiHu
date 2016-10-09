@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.webkit.WebSettings;
@@ -29,6 +30,9 @@ public class ArticleFragment extends BaseFragment {
 
     @BindView(R.id.wv_article)
     WebView mWvArticle;
+
+    @BindView(R.id.fab_lookup_comment)
+    FloatingActionButton mFabLookUpComment;
 
     private int mArticleId;
     private WebSettings mWebSettings;
@@ -64,6 +68,13 @@ public class ArticleFragment extends BaseFragment {
         mWebSettings = mWvArticle.getSettings();
         mWebSettings.setDefaultTextEncodingName("utf-8");
         mWebSettings.setJavaScriptEnabled(true);
+    }
+
+    @Override
+    public void initListener() {
+        super.initListener();
+        mFabLookUpComment.setOnClickListener(v ->
+                CommentActivity.Companion.startThis(mActivity, ((ArticleActivity)mActivity).mArticleId));
     }
 
     @Override

@@ -30,7 +30,7 @@ public class ArticleActivity extends BaseFragmentActivity {
     @BindBitmap(R.mipmap.ic_launcher)
     Bitmap mDefaultBitmap;
 
-    private int mArticleId;
+    public int mArticleId;
 
     @Override
     public void initBundle() {
